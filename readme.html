@@ -1,0 +1,20 @@
+<h1 id="年local学生部で出典する技術書用リポジトリ">2018年LOCAL学生部で出典する技術書用リポジトリ</h1>
+<h2 id="review">Re:View</h2>
+<p>Re:VIEW は，EWB や RD あるいは Wiki に似た簡易フォーマットで記述したテキストファイルを，目的に応じて各種の形式に変換するツールセット．</p>
+<h4 id="環境構築">環境構築</h4>
+<p>http://magicbullet.hatenablog.jp/entry/review_howtouse</p>
+<h4 id="review記法">Re:View記法</h4>
+<p>https://github.com/kmuto/review/blob/master/doc/format.ja.md</p>
+<p>または，sample-bookディレクトリ参照</p>
+<h4 id="review---latexへの変換">Re:View -&gt; LaTeXへの変換</h4>
+<pre class="sourceCode bash" id="cb1"><code class="sourceCode bash"><div class="sourceLine" id="cb1-1" data-line-number="1"><span class="ex">review-compile</span> --target=latex</div></code></pre>
+<h4 id="組版review---pdfにタイプセット">組版(Re:View -&gt; PDFにタイプセット)</h4>
+<pre class="sourceCode bash" id="cb2"><code class="sourceCode bash"><div class="sourceLine" id="cb2-1" data-line-number="1"><span class="ex">review-pdfmaker</span> config.yml</div></code></pre>
+<p>デフォルトはbook.pdfにタイプセットされる． ちなみにreview-compile –target=latexで生成したtexファイルを変更しても review-pdfmakerに反映される．</p>
+<h4 id="markdown---reviewへの変換">markdown -&gt; Re:Viewへの変換</h4>
+<h5 id="インストール">インストール</h5>
+<pre class="sourceCode bash" id="cb3"><code class="sourceCode bash"><div class="sourceLine" id="cb3-1" data-line-number="1"><span class="ex">gem</span> install md2review</div></code></pre>
+<h5 id="実行">実行</h5>
+<pre class="sourceCode bash" id="cb4"><code class="sourceCode bash"><div class="sourceLine" id="cb4-1" data-line-number="1"><span class="ex">md2review</span> sample.md <span class="op">&gt;</span> sample.re</div></code></pre>
+<h5 id="変換の際の注意点">変換の際の注意点</h5>
+<p>https://qiita.com/nanbuwks/items/9b00e8012e328de6e440</p>
