@@ -43,3 +43,11 @@ https://qiita.com/nanbuwks/items/9b00e8012e328de6e440
 ``` bash
 docker run --rm -v `pwd`:/work vvakame/review /bin/sh -c "cd /work && review-pdfmaker config.yml"
 ```
+
+##### FujiwaLaTeXさんのfork元のmasterと同期
+```bash
+git remote add upstream https://github.com/username/hogehoge.git
+git fetch upstream
+git checkout
+git merge upstream/master
+```
