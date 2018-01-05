@@ -278,3 +278,6 @@ build-iPhoneSimulator/
 .rvmrc
 
 # End of https://www.gitignore.io/api/ruby,latex
+
+# FujiwaLaTeX Setting
+book.pdf

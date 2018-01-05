@@ -38,3 +38,6 @@ md2review sample.md > sample.re
 
 ##### 変換の際の注意点
 https://qiita.com/nanbuwks/items/9b00e8012e328de6e440
+
+##### Docker上で実行
+docker run --rm -v `pwd`:/work vvakame/review /bin/sh -c "cd /work && review-pdfmaker config.yml"
