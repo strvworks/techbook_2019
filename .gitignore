@@ -281,3 +281,6 @@ build-iPhoneSimulator/
 
 # FujiwaLaTeX Setting
 book.pdf
+main.pdf
+
+\.DS_Store
