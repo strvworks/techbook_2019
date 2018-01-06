@@ -1,0 +1,87 @@
+\RequirePackage{xkeyval}
+% ヘッダ・フッタを細かく設定する為に必要
+\RequirePackage{fancyhdr}
+\RequirePackage{tikz}
+\RequirePackage{suffix}
+\RequirePackage{titlesec}
+\RequirePackage{lmodern}
+
+\newcommand{\separateline}{\hspace{1em}\tikz[baseline=0.5em, x=1em, y=1.5em]{\draw[fill] (1,1) rectangle (1.2,0)}\hspace{1em}}
+\renewcommand{\headfont}{\gtfamily\sffamily\bfseries}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ヘッダ・フッタの設定
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% plainスタイルのヘッダ・フッタを定義
+\fancypagestyle{plain}{%
+  % 左ヘッダにはページ番号
+  %\fancyhead[LH]{}
+  % 右ヘッダには章
+  \fancyhead[OR]{\leftmark\hspace{2em}{\gtfamily\sffamily\bfseries\upshape\thepage}}
+  \fancyhead[EL]{{\gtfamily\sffamily\bfseries\upshape\thepage}\hspace{2em}\rightmark}
+  \fancyhead[OL,ER]{}
+
+  % 中央フッタのページ番号は消しておく
+  \fancyfoot[CF]{}
+}
+\pagestyle{plain}
+\renewcommand{\chaptermark}[1]{\markboth{第\thechapter 章\ #1}{}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 奥付の設定
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\define@key{impression}{name}{\def\booktitle{#1}} % 本のタイトルの定義
+\define@key{impression}{author}{\def\bookauthors{#1}} % 本の著者名の定義
+\define@key{impression}{date}{\def\publishdate{#1}} % 発行年月日の定義
+\define@key{impression}{illust}{\def\illustrators{#1}} % 挿絵の定義
+\define@key{impression}{print}{\def\printingoffice{#1}} % 印刷所の定義
+
+\newcommand{\myimpression}[1][name=タイトル,author=俺,date=\today,illust=俺,print=俺]{%
+\setkeys{impression}{#1}
+\thispagestyle{empty}
+\vspace*{\stretch{1}}
+\begin{flushright}
+\begin{minipage}{0.7\hsize}
+\textbf{\Large \booktitle}\\
+\hrulefill
+\begin{description}
+  \item{著者：}\bookauthors
+  \item{挿絵：}\illustrators
+  \item{発行：}\publishdate
+  \item{印刷：}\printingoffice
+\end{description}
+\hrulefill \\
+落丁，乱丁の際でもお取り替えしません． \\\\
+本書は著作権上の保護を受けているのかよく分かりません．本書の一部あるいは全部について，LOCAL学生部から
+文書の許諾を得るよりもgithubのリポジトリからコピペした方が早いと思いますよ．
+\end{minipage}
+\end{flushright}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% チャプター毎の著者表示の設定
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\@currentchapauthor{}
+\newcommand\chapterauthor[1]{\edef\@currentchapauthor{#1}}%\printchapterauthor{#1}}
+\WithSuffix\newcommand\chapterauthor*[1]{\edef\@currentchapauthor{#1}}%\printchapterauthor{#1}}
+
+\makeatletter
+\newcommand{\printchapterauthor}[1]{%
+  {\parindent0pt\vspace*{-25pt}%
+  \linespread{1.1}\Huge\scshape#1%
+  \par\nobreak\vspace*{35pt}}
+  \@afterheading%
+}
+\newcommand{\authortoc}[1]{%
+  \addtocontents{toc}{\vskip-10pt}%
+  \addtocontents{toc}{%
+    \protect\contentsline{chapter}%
+    {\hskip1.3em\mdseries\scshape\protect\scriptsize#1}{}{}}
+  \addtocontents{toc}{\vskip5pt}%
+}
+
+\titleformat{\chapter}[block]
+{}{}{0pt}{
+  \huge\filleft\headfont
+}[
+  \hrule \if@mainmatter{\authortoc{\@currentchapauthor}\Large{\filleft 第 \thechapter 章 \@currentchapauthor}}\fi
+]
