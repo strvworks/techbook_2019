@@ -1,0 +1,57 @@
+\section{はじめに}
+皆さんはちょっとしたメモやプログラミングにどんなエディタを使いますか？Vim？それともEmacs？まぁ色々ありますよね．人それぞれ好き嫌いがあると思います．僕はVimを自分好みに拡張するのが好きです\footnote{そこのEmacs教，石を投げないで！}．でも，人には自作欲求があります．CPU，OS，言語，更に最近はキーボードなどが人気ですが，エディタも中々面白いですよ．CUIは時代遅れなんてそんなの気にしちゃいけません．ソースコードは\href{https://github.com/takuzoo3868/takdit}{github.com/takuzoo3868/takdit}に置いてあります．
+
+\section{準備}
+
+
+
+外部ライブラリに依存しない事を目標としていますが，Cコンパイラと\mintinline{bash}{make}コマンドは準備する必要があります．
+\mintinline{bash}{cc --version}や\mintinline{bash}{make -v}でインストールされているかどうか確認できます．自身の環境にコンパイラがインストールされていなかった場合は，Google先生に聞いてみましょう．
+
+\subsubsection{makeによるコンパイル}
+解説のために本文中では\mintinline{bash}{takdit}と記載しますが，自作の際は好きな名前に置き換えて下さい．\mintinline{bash}{cc takdit.c -o takdit}などと打ち込めばコンパイルできます．しかし試行錯誤を繰り返すため，再コンパイルの度に同じ事をするのはあまりスマートではありません．\mintinline{bash}{make}を用いることでプログラムコンパイルを少しだけ楽にしておきましょう．\mintinline{bash}{Makefile}を作成し，以下の内容を記述しておきます．
+\begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{text}
+  takdit: takdit.c
+  $(CC) -o takdit takdit.c -Wall -W -pedantic -std=c99
+\end{minted}
+この辺については，準備段階なので詳細は省きます．これで準備は
+
+\section{基本構成}
+基本となる骨格はkiloというテキストエディタを参考にします\footnote{\href{https://github.com/antirez/kilo}{github.com/antirez/kilo}}．
+Salvatore Sanfilippo氏によって開発されたC言語製のエディタです．BSD 2-clauseにて公開されています．
+紹介文に，
+\begin{quote}
+  Kilo is a small text editor in less than 1K lines of code (counted with cloc).
+\end{quote}
+とあるように1000行程度なので目で追っていくもの問題ないでしょう．ちょっと厳しいなという方は\mintinline{c}{int main()}だけでも目を通す事をお勧めします．
+
+\begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}
+  int main(int argc, char **argv) {
+    // takdit <ファイル名> という引数のみ実行
+    if (argc != 2) {
+      fprintf(stderr, "Usage: takdit <filename>\n");
+      exit(1);
+    }
+
+    initEditor();                         // エディタの初期化
+    editorSelectSyntaxHighlight(argv[1]); // シンタックスハイライトの適用
+    editorOpen(argv[1]);                  // ファイルを開く
+    enableRawMode(STDIN_FILENO);          // Rawモードの有効化
+    editorSetStatusMessage(
+            "HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find");
+    while (1) {
+      editorRefreshScreen();                // 変更の反映
+      editorProcessKeypress(STDIN_FILENO);  // キー入力待ち
+    }
+    return 0;
+  }
+\end{minted}
+
+処理の流れは，
+
+非常にコンパクトなCUIベースのテキストエディタであり学習には最適ですが，実際の使用には難が多くあります．
+改善点を列挙しますと，
+
+\section{Build your own Editor!!!}
+
+\subsection{シンタックスハイライト対応}
