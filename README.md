@@ -11,3 +11,11 @@
 ``` bash
 uplatex -shell-escape main.tex
 ```
+
+##### FujiwaLaTeXさんのfork元のmasterと同期
+```bash
+git remote add upstream https://github.com/username/hogehoge.git
+git fetch upstream
+git checkout
+git merge upstream/master
+```
