@@ -1,7 +1,20 @@
 \documentclass[autodetect-engine,dvipdfmx-if-dvi,ja=standard,a4paper,12pt,twoside,openany,layout=v2]{bxjsbook}
 
-\usepackage{localst17}
-\usepackage{mymintedsetting}
+\newcommand{\stypath}{./sty}
+\newcommand{\articlepath}{./articles}
+\newcommand{\assetspath}{./assets}
+
+\newcommand{\coverasset}{\assetspath/coverasset}
+\newcommand{\jumpakuasset}{\assetspath/jumpakuasset}
+\newcommand{\takuzooasset}{\assetspath/takuzoo3868asset}
+\newcommand{\lrfasset}{\assetspath/lrf141asset}
+\newcommand{\materialofmouseasset}{\assetspath/materialofmouseasset}
+\newcommand{\keisukeasset}{\assetspath/keisuke495500asset}
+\newcommand{\chikuwaitasset}{\assetspath/chikuwa_ITasset}
+
+\usepackage{\stypath/localst17}
+\usepackage{\stypath/mymintedsetting}
+
 \usepackage{lipsum}
 \usepackage{pdfpages}
 \usepackage{layout}
@@ -13,46 +26,45 @@
 \usepackage{pxrubrica}
 \usepackage{pxjahyper}
 
-
 \title{知らねー}
 \author{うっひょい \and ちくうぇいと \and あわあわ \and けんつ \and さわだ \and Jumpaku}
 \date{\today}
 
 \begin{document}
 \begin{titlepage}
-\includepdf[nup=1x1, pages=-,scale=0.8, offset=-1.3cm 1cm]{orailly.pdf}
+\includepdf[nup=1x1, pages=-,scale=0.8, offset=-1.3cm 1cm]{\coverasset/orailly.pdf}
 \end{titlepage}
 
 \maketitle
 \frontmatter
 \chapter{はじめに}
-\input{first}
+\input{\articlepath/first}
 
 \tableofcontents
 \mainmatter
 \chapterauthor{うっひょい}
 \chapter{\LaTeX の乱数生成アルゴリズムを改善する}
-\input{keisuke495500}
+\input{\articlepath/keisuke495500}
 
 \chapterauthor{chikuwait(ちくうぇいと)}
 \chapter{超入門 仮想化技術}
-\input{chikuwa_IT}
+\input{\articlepath/chikuwa_IT}
 
 \chapterauthor{あわあわ}
 \chapter{ほげ}
-\input{materialofmouse}
+\input{\articlepath/materialofmouse}
 
 \chapterauthor{けんつ}
 \chapter{入門Linux Kernel}
-\input{lrf141}
+\input{\articlepath/lrf141}
 
 \chapterauthor{さわだ}
 \chapter{自作エディタ入門編}
-\input{takuzoo3868}
+\input{\articlepath/takuzoo3868}
 
 \chapterauthor{Jumpaku}
 \chapter{世界と孤独の\ruby[g]{説法}{エピローグ}}
-\input{Jumpaku}
+\input{\articlepath/Jumpaku}
 
 \newpage
 \myimpression

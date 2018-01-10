@@ -34,7 +34,7 @@ Salvatore Sanfilippo氏によって開発されたC言語製のエディタで�
   Kilo is a small text editor in less than 1K lines of code (counted with cloc).
 \end{quote}
 とあるように1000行程度なので目で追っていくもの問題ないでしょう．ちょっと厳しいという方は\mintinline{c}{int main()}だけでも目を通す事をお勧めします．
-\inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{takuzoo3868asset/main.c}
+\inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/main.c}
 処理の流れはコメントにあるように，
 \begin{enumerate}
   \item 起動にあたりエディタの初期化
@@ -46,17 +46,17 @@ Salvatore Sanfilippo氏によって開発されたC言語製のエディタで�
 となります．ループでは画面反映とキー入力待ちを行っています．本書では基本構造として上記の5点を解説します．
 編集対象ファイルの内容をメモリに読み込み，一つの文字列データとして確保\footnote{\mintinline{c}{char*}でアクセスされるヒープ上のメモリ領域}．
 
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{takuzoo3868asset/struct.c}
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/struct.c}
 
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{takuzoo3868asset/initEditor.c}
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/initEditor.c}
 
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{takuzoo3868asset/editorSelectSyntaxHighlight.c}
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/editorSelectSyntaxHighlight.c}
 
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{takuzoo3868asset/editorOpen.c}
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/editorOpen.c}
 
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{takuzoo3868asset/enableRawMode.c}
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/enableRawMode.c}
 
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{takuzoo3868asset/enableRawMode.c}
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/enableRawMode.c}
 
 \section{Build your own Editor!!!}
 コンパクトなCUIベースのテキストエディタですが，実際の使用には難が多くあります．改善点を列挙しますと，
