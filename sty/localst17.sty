@@ -95,12 +95,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 著者自己紹介文の設定
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\myintroduce}[3]{%
+\newenvironment{myintroduce}[2]{%
+\noindent
 \begin{minipage}[c]{0.18\hsize}
   \includegraphics[width=\hsize]{#1} % profile image
 \end{minipage}
 \begin{minipage}[c]{0.78\hsize}
   #2 % handle name
-\end{minipage}\vspace{25truept}\par
-#3 % introduce message
-}%
+\end{minipage}\\[15truept]
+}{\par\vspace{15truept}}%

@@ -1,4 +1,4 @@
-\documentclass[autodetect-engine,dvipdfmx-if-dvi,ja=standard,a4paper,12pt,twoside,openany,layout=v2,tombow]{bxjsbook}
+\documentclass[autodetect-engine,dvipdfmx-if-dvi,ja=standard,a5paper,12pt,twoside,openany,layout=v2,tombow]{bxjsbook}
 
 \newcommand{\stypath}{./sty}
 \newcommand{\articlepath}{./articles}
@@ -18,6 +18,7 @@
 \usepackage{lipsum}
 \usepackage{pdfpages}
 \usepackage{layout}
+\usepackage[size=a4paper]{bxpapersize}% 読み込みだけでOK
 
 %Takuzoo3868
 \usepackage{dirtree}
@@ -37,11 +38,34 @@
 
 \maketitle
 \frontmatter
-\myintroduce{\jumpakuasset/A.png}{うっひょい}{\lipsum[1]}
-\myintroduce{\jumpakuasset/B.png}{ちくうぇいと}{\lipsum[2]}
-\myintroduce{\jumpakuasset/C.png}{あわあわ}{\lipsum[3]}
-\myintroduce{\jumpakuasset/D.png}{けんつ}{\lipsum[4]}
-\myintroduce{\jumpakuasset/D.png}{さわだ}{\lipsum[5]}
+\begin{myintroduce}{\jumpakuasset/A.png}{うっひょい}
+  室蘭工業大学医学部/みりあP/かおるちゃんのせんせぇ/
+  TeX/LaTeX/擬似乱数/錬金術師/ネクロマンサー/筋肉は裏切らない/
+  手は大きいけど器は小さい/ロリわLaTeX/目標は新幹線/かゆいところに手が届く/
+  好きになったキャラがたまたま年齢が低いだけ/バブみりあ/ゴット/
+  バーサーカーソウル/にんにく増し脂多め味濃いめ
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/B.png}{ちくうぇいと}
+  mrubyの初心者
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/C.png}{あわあわ}
+  ！！！！
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/D.png}{けんつ}
+  （っ'-')╮ =͟͟͞͞ 進捗ﾌﾞｫﾝ
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/E.png}{さわだ}
+  \#SecHack365 \#taku3868\_memo \\┈┈┈Sawada is overcapacity┈┈ \\
+   ┈┈╭━━━━━━╮┏╮╭┓┈┈ \\
+   ┈┈┃╰╯┈┈┈┈┃╰╮╭╯┈┈ \\
+   ┈┈┣━╯┈┈┈┈╰━╯┃┈┈┈ \\
+   ┈┈╰━━━━━━━━━╯┈┈┈ \\
+   ╭┳╭┳╭┳╭┳╭┳╭┳╭┳╭┳
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/F.png}{Jumpaku}
+
+\end{myintroduce}
+
 \chapter{はじめに}
 \input{\articlepath/first}
 
