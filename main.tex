@@ -1,4 +1,4 @@
-\documentclass[autodetect-engine,dvipdfmx-if-dvi,ja=standard,a4paper,12pt,twoside,openany,layout=v2]{bxjsbook}
+\documentclass[autodetect-engine,dvipdfmx-if-dvi,ja=standard,a4paper,12pt,twoside,openany,layout=v2,tombow]{bxjsbook}
 
 \newcommand{\stypath}{./sty}
 \newcommand{\articlepath}{./articles}
@@ -37,6 +37,11 @@
 
 \maketitle
 \frontmatter
+\myintroduce{\jumpakuasset/A.png}{うっひょい}{\lipsum[1]}
+\myintroduce{\jumpakuasset/B.png}{ちくうぇいと}{\lipsum[2]}
+\myintroduce{\jumpakuasset/C.png}{あわあわ}{\lipsum[3]}
+\myintroduce{\jumpakuasset/D.png}{けんつ}{\lipsum[4]}
+\myintroduce{\jumpakuasset/D.png}{さわだ}{\lipsum[5]}
 \chapter{はじめに}
 \input{\articlepath/first}
 
