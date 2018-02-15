@@ -15,10 +15,12 @@
 \usepackage{\stypath/localst17}
 \usepackage{\stypath/mymintedsetting}
 
+%\usepackage[colorgrid,gridunit=pt,texcoord]{eso-pic} % ページ上にグリッド線を表示
 \usepackage{lipsum}
-\usepackage{pdfpages}
 \usepackage{layout}
 \usepackage[size=a4paper]{bxpapersize}% 読み込みだけでOK
+\usepackage[absolute,overlay]{textpos}
+
 
 %Takuzoo3868
 \usepackage{dirtree}
@@ -33,11 +35,15 @@
 
 \begin{document}
 \begin{titlepage}
-\includepdf[nup=1x1, pages=-,scale=0.8, offset=-1.3cm 1cm]{\coverasset/orailly.pdf}
+  \begin{textblock*}{\hsize}(60pt, 60pt)
+    \centering
+    \includegraphics[scale=0.615]{\coverasset/orailly.pdf}
+  \end{textblock*}
+  a
 \end{titlepage}
-
 \maketitle
 \frontmatter
+
 \begin{myintroduce}{\jumpakuasset/A.png}{うっひょい}
   室蘭工業大学医学部/みりあP/かおるちゃんのせんせぇ/
   TeX/LaTeX/擬似乱数/錬金術師/ネクロマンサー/筋肉は裏切らない/
