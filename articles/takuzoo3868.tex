@@ -1,0 +1,65 @@
+\section{はじめに}
+皆さんはちょっとしたメモやプログラミングにどんなエディタを使いますか？Vim？それともEmacs？まぁ色々ありますよね．人それぞれ好き嫌いがあると思います．僕はVimを自分好みに拡張するのが好きです\footnote{そこのEmacs教徒，石を投げないで！}．でも，人には自作欲求があります．CPU，OS，言語，更に最近はキーボードなどが人気ですが，エディタも中々面白いですよ．CUIは時代遅れなんてそんなの気にしちゃいけません．ソースコードは\href{https://github.com/takuzoo3868/takdit}{github.com/takuzoo3868/takdit}に置いてあります．
+
+\section{準備}
+テキストエディタと言いつつも初めから高機能なエディタを自作するのは至難の業です．そこで，最低限ファイルを編集して保存できるようにする所から始めるといいかなと思います．次にシンタックスハイライト対応や文字列検索機能などを考えていきましょう．リポジトリにあるテキストエディタのファイル構造は以下ようになっています．
+\begin{figure}[H]
+  \dirtree{%
+  .1 takdit/.
+  .2 modules/ \dotfill  \begin{minipage}[t]{7cm}拡張機能を追加していくディレクトリ{.}\end{minipage}.
+  .3 syntax/ \dotfill  \begin{minipage}[t]{7cm}シンタックスハイライト用の構造体を定義{.}\end{minipage}.
+  .2 LICENSE.
+  .2 Makefile.
+  .2 README.md.
+  .2 takdit.c \dotfill  \begin{minipage}[t]{7cm}メインとなるソースコード{.}\end{minipage}.
+  .2 takdit.h \dotfill  \begin{minipage}[t]{7cm}定数定義や構造体を含むヘッダ{.}\end{minipage}.
+  }
+\end{figure}
+外部ライブラリに依存しない事を目標としていますが，Cコンパイラと\mintinline{bash}{make}コマンドは準備する必要があります．
+\mintinline{bash}{cc --version}や\mintinline{bash}{make -v}でインストールされているかどうか確認できます．自身の環境にコンパイラがインストールされていなかった場合は，Google先生に聞いてみましょう．
+
+\subsubsection{makeによるコンパイル}
+解説のために本文中では\mintinline{bash}{takdit}と記載しますが，好きな名前に置き換えて下さい\footnote{4文字程度が打ちやすくていい感じです．私は馬鹿なので6文字も使ってしまいました．}．\mintinline{bash}{cc takdit.c -o takdit}などと打ち込めばコンパイルできます．しかし試行錯誤を繰り返すため，再コンパイルの度に同じ事をするのはあまりスマートではありません．\mintinline{bash}{make}を用いることでプログラムコンパイルを少しだけ楽にしておきましょう．\mintinline{bash}{Makefile}を作成し，以下の内容を記述しておきます．
+\begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{text}
+  takdit: takdit.c
+  $(CC) -o takdit takdit.c -Wall -W -pedantic -std=c99
+\end{minted}
+この辺については，準備段階なので詳細は省きます．とてもざっくりに言いますと，諸々の構文をチェックして警告を表示してくれるようオプションを設定しています．これで準備は完了です．
+
+\section{基本構成}
+基本となる骨格はkiloというテキストエディタを参考にします\footnote{\href{https://github.com/antirez/kilo}{github.com/antirez/kilo}}．
+Salvatore Sanfilippo氏によって開発されたC言語製のエディタです．BSD 2-clauseにて公開されています．
+紹介文に，
+\begin{quote}
+  Kilo is a small text editor in less than 1K lines of code (counted with cloc).
+\end{quote}
+とあるように1000行程度なので目で追っていくもの問題ないでしょう．ちょっと厳しいという方は\mintinline{c}{int main()}だけでも目を通す事をお勧めします．
+\inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/main.c}
+処理の流れはコメントにあるように，
+\begin{enumerate}
+  \item 起動にあたりエディタの初期化
+  \item 引数にあるファイルの拡張子に対応したシンタックスハイライトを適用
+  \item ファイルをメモリ上へ展開
+  \item エスケープシーケンスを利用してターミナルをRawモードへ変更
+  \item ループ処理
+\end{enumerate}
+となります．ループでは画面反映とキー入力待ちを行っています．本書では基本構造として上記の5点を解説します．
+編集対象ファイルの内容をメモリに読み込み，一つの文字列データとして確保\footnote{\mintinline{c}{char*}でアクセスされるヒープ上のメモリ領域}．
+
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/struct.c}
+
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/initEditor.c}
+
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/editorSelectSyntaxHighlight.c}
+
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/editorOpen.c}
+
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/enableRawMode.c}
+
+ \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/enableRawMode.c}
+
+\section{Build your own Editor!!!}
+コンパクトなCUIベースのテキストエディタですが，実際の使用には難が多くあります．改善点を列挙しますと，
+
+\subsection{シンタックスハイライト対応}
+ヘッダーファイルとしてシンタックスハイライトをまとめた構造体を作成します．

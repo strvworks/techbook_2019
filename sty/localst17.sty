@@ -5,6 +5,7 @@
 \RequirePackage{suffix}
 \RequirePackage{titlesec}
 \RequirePackage{lmodern}
+\RequirePackage{amsmath}
 
 \newcommand{\separateline}{\hspace{1em}\tikz[baseline=0.5em, x=1em, y=1.5em]{\draw[fill] (1,1) rectangle (1.2,0)}\hspace{1em}}
 \renewcommand{\headfont}{\gtfamily\sffamily\bfseries}
@@ -75,7 +76,7 @@
   \addtocontents{toc}{\vskip-10pt}%
   \addtocontents{toc}{%
     \protect\contentsline{chapter}%
-    {\hskip1.3em\mdseries\scshape\protect\scriptsize#1}{}{}}
+    {\hskip1.3em\mdseries\protect\scriptsize#1}{}{}}
   \addtocontents{toc}{\vskip5pt}%
 }
 
@@ -91,3 +92,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage[bookmarks=true,bookmarksnumbered=true,colorlinks=true,setpagesize=false,pdfborder={0 0 0}]{hyperref}
 \RequirePackage{pxjahyper}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 著者自己紹介文の設定
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newenvironment{myintroduce}[2]{%
+\noindent
+\begin{minipage}[c]{0.18\hsize}
+  \includegraphics[width=\hsize]{#1} % profile image
+\end{minipage}
+\begin{minipage}[c]{0.78\hsize}
+  #2 % handle name
+\end{minipage}\\[15truept]
+}{\par\vspace{15truept}}%

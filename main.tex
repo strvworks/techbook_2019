@@ -1,8 +1,29 @@
-\documentclass[autodetect-engine,dvipdfmx-if-dvi,ja=standard,a4paper,12pt,twoside,openany,layout=v2]{bxjsbook}
-%\usepackage{reviewmacro}
-\usepackage{localst17}
-\usepackage{mymintedsetting}
+\documentclass[autodetect-engine,dvipdfmx-if-dvi,ja=standard,a5paper,12pt,twoside,openany,layout=v2,tombow]{bxjsbook}
+
+\newcommand{\stypath}{./sty}
+\newcommand{\articlepath}{./articles}
+\newcommand{\assetspath}{./assets}
+
+\newcommand{\coverasset}{\assetspath/coverasset}
+\newcommand{\jumpakuasset}{\assetspath/jumpakuasset}
+\newcommand{\takuzooasset}{\assetspath/takuzoo3868asset}
+\newcommand{\lrfasset}{\assetspath/lrf141asset}
+\newcommand{\materialofmouseasset}{\assetspath/materialofmouseasset}
+\newcommand{\keisukeasset}{\assetspath/keisuke495500asset}
+\newcommand{\chikuwaitasset}{\assetspath/chikuwa_ITasset}
+
+\usepackage{\stypath/localst17}
+\usepackage{\stypath/mymintedsetting}
+
+%\usepackage[colorgrid,gridunit=pt,texcoord]{eso-pic} % ページ上にグリッド線を表示
 \usepackage{lipsum}
+\usepackage{layout}
+\usepackage[size=a4paper]{bxpapersize}% 読み込みだけでOK
+\usepackage[absolute,overlay]{textpos}
+
+
+%Takuzoo3868
+\usepackage{dirtree}
 
 %Jumpaku
 \usepackage{pxrubrica}
@@ -14,38 +35,71 @@
 
 \begin{document}
 \begin{titlepage}
-  \includegraphics{main.jpg}
+  \begin{textblock*}{\hsize}(60pt, 60pt)
+    \centering
+    \includegraphics[scale=0.615]{\coverasset/orailly.pdf}
+  \end{textblock*}
+  a
 \end{titlepage}
 \maketitle
 \frontmatter
+
+\begin{myintroduce}{\jumpakuasset/A.png}{うっひょい}
+  室蘭工業大学医学部/みりあP/かおるちゃんのせんせぇ/
+  TeX/LaTeX/擬似乱数/錬金術師/ネクロマンサー/筋肉は裏切らない/
+  手は大きいけど器は小さい/ロリわLaTeX/目標は新幹線/かゆいところに手が届く/
+  好きになったキャラがたまたま年齢が低いだけ/バブみりあ/ゴット/
+  バーサーカーソウル/にんにく増し脂多め味濃いめ
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/B.png}{ちくうぇいと}
+  mrubyの初心者
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/C.png}{あわあわ}
+  ！！！！
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/D.png}{けんつ}
+  （っ'-')╮ =͟͟͞͞ 進捗ﾌﾞｫﾝ
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/E.png}{さわだ}
+  \#SecHack365 \#taku3868\_memo \\┈┈┈Sawada is overcapacity┈┈ \\
+   ┈┈╭━━━━━━╮┏╮╭┓┈┈ \\
+   ┈┈┃╰╯┈┈┈┈┃╰╮╭╯┈┈ \\
+   ┈┈┣━╯┈┈┈┈╰━╯┃┈┈┈ \\
+   ┈┈╰━━━━━━━━━╯┈┈┈ \\
+   ╭┳╭┳╭┳╭┳╭┳╭┳╭┳╭┳
+\end{myintroduce}
+\begin{myintroduce}{\jumpakuasset/F.png}{Jumpaku}
+
+\end{myintroduce}
+
 \chapter{はじめに}
-\input{first}
+\input{\articlepath/first}
 
 \tableofcontents
 \mainmatter
 \chapterauthor{うっひょい}
 \chapter{\LaTeX の乱数生成アルゴリズムを改善する}
-\input{keisuke495500}
+\input{\articlepath/keisuke495500}
 
 \chapterauthor{chikuwait(ちくうぇいと)}
 \chapter{超入門 仮想化技術}
-\input{chikuwa_IT}
+\input{\articlepath/chikuwa_IT}
 
 \chapterauthor{あわあわ}
 \chapter{ほげ}
-\input{materialofmouse}
+\input{\articlepath/materialofmouse}
 
 \chapterauthor{けんつ}
 \chapter{入門Linux Kernel}
-\input{lrf141}
+\input{\articlepath/lrf141}
 
 \chapterauthor{さわだ}
 \chapter{自作エディタ入門編}
-\input{takuzoo3868}
+\input{\articlepath/takuzoo3868}
 
 \chapterauthor{Jumpaku}
-\chapter{ほげ}
-\input{Jumpaku}
+\chapter{世界と孤独の\ruby[g]{説法}{エピローグ}}
+\input{\articlepath/Jumpaku}
 
 \newpage
 \myimpression

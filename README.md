@@ -8,9 +8,16 @@
   * takuzoo3868.tex
   * Jumpaku.tex
 ## コンパイル
+texlive2017をインストールしてる人は
 ``` bash
 uplatex -shell-escape main.tex
 ```
+それ以外の人は
+``` bash
+./do_latexmk.sh
+```
+3GBくらいのdocker imageをダウンロードするので注意
+
 
 ##### FujiwaLaTeXさんのfork元のmasterと同期
 ```bash
