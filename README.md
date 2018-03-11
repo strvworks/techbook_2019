@@ -10,11 +10,13 @@
 ## コンパイル
 texlive2017をインストールしてる人は
 ``` bash
-uplatex -shell-escape main.tex
+$ uplatex -shell-escape main.tex
+$ uplatex -shell-escape main.tex
+$ dvipdfmx main
 ```
 それ以外の人は
 ``` bash
-./do_latexmk.sh
+$ docker-compose up
 ```
 3GBくらいのdocker imageをダウンロードするので注意
 
