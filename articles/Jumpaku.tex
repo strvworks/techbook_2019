@@ -13,9 +13,12 @@ Jumpaku(\ref{fig:jumpakuJ})と申します．
 \href{http://jumpaku.hatenablog.com/entry/2017/07/24/044918}{\underline{罪と幸せの\ruby[g]{四苦八苦}{ノアズアーク}}}）の外伝ともなっています．
 
 本作品はPDFファイルとして頒布されることを前提としています．
-遊び方としては，
-プレイヤは基本的にストーリーを読み進め，途中で選択肢がある時は，選択したリンク先へ飛んでください．
-
+したがって，紙媒体では遊ぶことができません．
+そこでまず，\href{https://github.com/hyoiutu/techbookfest_localstudents_2017}からリポジトリをクローンします．
+次に，Jumpaku.texの\verb`\begin{comment}`と\verb`\end{comment}`を消します．
+そして，README.mdに従ってコンパイルしてください．
+遊び方としては，プレイヤは基本的にストーリーを読み進め，途中で選択肢がある時は，選択したリンク先へ飛んでください．
+\begin{comment}
 \section{愛の仲間}\label{section:jumpakubegin}
 私の名は\ruby[g]{愛}{あい}（\ref{fig:jumpakuI}）．
 探偵である．
@@ -283,6 +286,7 @@ Jumpaku(\ref{fig:jumpakuJ})と申します．
 \section*{サンプルコード}\label{section:jumpakuprogram}
 以下に今回の事件の論理的推論を行うためのPython3のプログラムを示す．
 \inputminted[linenos]{python3}{\jumpakuasset/LogicQuiz.py}
+\end{comment}
 
 \section*{あとがき}
 本章にはBSD 2-Clause Licenseが適用されます．
