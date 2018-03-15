@@ -1,12 +1,11 @@
-from typing import TypeVar
+from typing import List, TypeVar
+
+A = TypeVar('A')
 
 
-A = TypeVar('A', bound=None)
+def head(xs: List[A]) -> A:
+    return xs[0]
 
 
-def my_sum(x: A, y: A) -> A:
-    return x + y
-
-
-result1 = my_sum(1, 2)
-result2 = my_sum([1, 2], [3, 4])
+result1 = head([1, 2, 3, 4, 5])
+result2 = head(['a', 'b', 'c'])

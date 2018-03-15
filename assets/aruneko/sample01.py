@@ -1,6 +1,9 @@
-def my_sum(x: int, y: int) -> int:
-    return x + y
+from typing import List
 
 
-result1 = my_sum(1, 2)
-result2 = my_sum([1, 2, 3], [4, 5, 6])
+def head(xs: List[int]) -> int:
+    return xs[0]
+
+
+result1 = head([1, 2, 3, 4, 5])
+result2 = head(['a', 'b', 'c'])
