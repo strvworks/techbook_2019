@@ -1,10 +1,9 @@
-\documentclass[autodetect-engine,dvipdfmx-if-dvi,ja=standard,a5paper,12pt,twoside,openany,layout=v2,tombow]{bxjsbook}
+\documentclass[autodetect-engine,dvipdfmx-if-dvi,ja=standard,a5paper,10.5pt,twoside,openany,layout=v2]{bxjsbook}
 
 \newcommand{\stypath}{./sty}
 \newcommand{\articlepath}{./articles}
 \newcommand{\assetspath}{./assets}
 
-\newcommand{\coverasset}{\assetspath/coverasset}
 \newcommand{\jumpakuasset}{\assetspath/jumpakuasset}
 \newcommand{\takuzooasset}{\assetspath/takuzoo3868asset}
 \newcommand{\lrfasset}{\assetspath/lrf141asset}
@@ -15,12 +14,8 @@
 \usepackage{\stypath/localst17}
 \usepackage{\stypath/mymintedsetting}
 
-%\usepackage[colorgrid,gridunit=pt,texcoord]{eso-pic} % ページ上にグリッド線を表示
 \usepackage{lipsum}
 \usepackage{layout}
-\usepackage[size=a4paper]{bxpapersize}% 読み込みだけでOK
-\usepackage[absolute,overlay]{textpos}
-
 
 %Takuzoo3868
 \usepackage{dirtree}
@@ -36,16 +31,8 @@
 \date{\today}
 
 \begin{document}
-\begin{titlepage}
-  \begin{textblock*}{\hsize}(60pt, 60pt)
-    \centering
-    \includegraphics[scale=0.615]{\coverasset/orailly.pdf}
-  \end{textblock*}
-  a
-\end{titlepage}
-\maketitle
 \frontmatter
-
+\maketitle
 \begin{myintroduce}{\jumpakuasset/A.png}{うっひょい}
   室蘭工業大学医学部/みりあP/かおるちゃんのせんせぇ/
   TeX/LaTeX/擬似乱数/錬金術師/ネクロマンサー/筋肉は裏切らない/
