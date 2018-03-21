@@ -7,7 +7,7 @@
     \centering
     \includegraphics[width=50mm]{./assets/chikuwa_ITasset/vps.png}
     \caption{hogehoge}
-    \label{fig:one}
+    \label{fig:vps}
 \end{figure}
 
 \section{ハイパーバイザについて}
@@ -21,13 +21,13 @@
     \centering
     \includegraphics[width=50mm]{./assets/chikuwa_ITasset/monolithic.png}
     \caption{モノリシックカーネル型ベアメタルハイパーバイザ}
-    \label{fig:one}
+    \label{fig:monolithic}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=50mm]{./assets/chikuwa_ITasset/monolithic.png}
     \caption{モノリシックカーネル型のハードウェアアクセス}
-    \label{fig:two}
+    \label{fig:monolithic_access}
 \end{figure}
 \subsection{マイクロカーネル型}
 主にXenやHyper-Vで採用されている方式で,　ハイパーバイザを管理する仮想マシンと管理OSを用意します. この管理OSはLinuxはWindows Serverなど汎用OSを使用します. また, 管理OSはXenではドメイン0, Hyper-Vでは親パーティションと呼ばれています. この方式では, デバイスドライバはハイパーバイザではなく, ハイパーバイザ上の仮想マシンとして動作している管理OSのデバイスドライバを使用します. 仮想マシンからハードウェアにアクセスする時はゲストOSから仮想デバイスのインターフェースを経由してハイパーバイザから管理OSに渡されます. そして管理OSのデバイスドライバからハードウェアにアクセスします.この方法は, 汎用OSのデバイスドライバを使用することで, モノリシックカーネル型に比べてハードウェアのサポートが多く, ハードウェアの対応が柔軟であるという利点があります. 例えば, Hyper-VならWindows用のデバイスドライバを使用することができます. しかしながら, ハードウェアにアクセスする際にハイパーバイザから管理OSを経由するため, モノリシックカーネル型よりも性能が低下してしまいがちであり, 管理用の汎用OSがクラッシュした場合全てのVMがクラッシュしてしまうといった欠点が存在します.
@@ -35,13 +35,13 @@
     \centering
     \includegraphics[width=50mm]{./assets/chikuwa_ITasset/monolithic.png}
     \caption{マイクロカーネル型ベアメタルハイパーバイザ}
-    \label{fig:one}
+    \label{fig:microkernel}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=50mm]{./assets/chikuwa_ITasset/monolithic.png}
     \caption{マイクロカーネル型のハードウェアアクセス}
-    \label{fig:two}
+    \label{fig:microkernel_access}
 \end{figure}
 
 \subsection{完全仮想化}
@@ -50,9 +50,16 @@
     \centering
     \includegraphics[width=50mm]{./assets/chikuwa_ITasset/monolithic.png}
     \caption{バイナリトランスレーション}
-    \label{fig:one}
+    \label{fig:binarytranslation}
 \end{figure}
 \subsection{準仮想化}
 準仮想化方式のハイパーバイザでは, ハイパーバイザ上で実行するゲストOSに手を加え, 仮想環境を実現しています. この方式では, ゲストOSのカーネルが発行するハードウェアを制御するシステムコールに手を加えることでハイパーバイザと協調することで高速に動作させようとするものです. なおこのような手を加えられたシステムコールはハイパーバイザコールと呼ばれます. バイナリトランスレーションではセンシティブ命令を動的に変換していたため、性能が低下しやすい特徴がありましたが, 準仮想化では静的に変換を行い修正するため, 性能には影響はありません. しかしながら, ゲストOSに予め変更を加える必要があるため, 使用するゲストOSに制限があるという欠点があります.
 \section{ホスト型(Type2)}
+ホスト型(Type2)はParallels DesktopやVirtualBoxなどで採用されている方式で, LinuxやWindowsといったホストOSの上でアプリケーションとして動作します. また, ハイパーバイザをインストールする先のPCをホストOSと呼びます. 主にサーバとしての仮想化よりもユーザがmacOS上でWindowsとwindows専用ソフトウェアを使用するといったようなクライアントサイドでの用途に用いられることが多いです. この方式の利点は, ホストOSを変更することもなく, アプリケーションとしてインストールすることができるため手軽に利用することができる点です. 最近ではVargrantのようなプロビジョニングツールが登場したことにより, 手軽に開発環境として仮想環境を用意することができるようにもなりました. しかしながら,ホスト型の欠点として仮想デバイスから物理デバイスにたどり着くまでにハイパーバイザ, ホストOSを経由する必要があるため, オーバヘッドがベアメタル型に比べて大きくなってしまいます.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=50mm]{./assets/chikuwa_ITasset/monolithic.png}
+    \caption{ホスト型ハイパーバイザ}
+    \label{fig:hosthypervisor}
+\end{figure}
 
