@@ -287,3 +287,4 @@ main.pdf
 
 # Python
 .mypy_cache/
+.vscode/
