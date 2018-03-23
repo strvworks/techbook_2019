@@ -1,5 +1,61 @@
-\section{Pythonと型}
+\section{はじめに}
+どうも、みなさんおなじみのあるねこさんです。この記事ではPythonの型アノテーション機能を
+活用し、型の力を借りつつPython上でHaskellライクな型クラスモデルを再現する方法を紹介します。また実際にPythonの型アノテーション機能を使う上でのメリットや注意点をその都度解説します。それでは型の世界へレッツゴー！
 
-\section{リストを改造しよう}
+\section{型とPythonとmypyと}
+\subsection{Pythonにおける型ヒンティング}
+あまりなじみがないかもしれませんが、Python3系では関数に型アノテーションを書くことができ、その機能はバージョンアップごとに強化されています。特にPython3.5ではtypingモジュールが追加されて引数に型アノテーションを書けるようになり、3.6では個別の変数にも書くことができるようになりました。また、ジェネリックや高階関数などもサポートされていて、多彩な型を表現できるようになっています。
+
+ただしこれらの型アノテーションは実行時には完全に無視され、いかなる値が渡ってきてもチェックは行われません。あくまで人間や静的コード解析ツールにとってわかりやすくなるためだけの機能となっています。そのため、List[int]型に特化した以下のコードはList[str]を与えても何のエラーや警告も出さずに実行できます。
+
+\inputpython{./assets/aruneko/sample01.py}
+
+\subsection{mypyによる型の解析}
+型チェックはmypyというツールを使って行います。あるいは、Pycharmにデフォルトで搭載されている型チェック機能も利用できます。ただしこれらのツールは同じコードを解析しても微妙に違う結果を返すので要注意です。この記事では特に断りが無い場合mypyを利用します。
+
+mypyをインストールするにはpipコマンドを利用します。一昔前は``mypy-lang''パッケージとして登録されていましたが、現在は``mypy''パッケージに名称を変更しているので、過去の資料を参照する際は注意が必要です。
+
+\begin{bashcode}
+pip install mypy
+\end{bashcode}
+
+それではmypyでの解析を試してみましょう。まず先ほどのサンプルコードを解析します。mypyコマンドで解析したいファイル名を引数に指定することで解析することができます。今回は型エラーを発生させるコードを書いているため、型チェックの結果int型とstr型は合致しないというエラーが発生しています。
+
+\begin{bashcode}
+mypy sample01.py
+sample01.py:9: error: List item 0 has incompatible type "str"; expected "int"
+sample01.py:9: error: List item 1 has incompatible type "str"; expected "int"
+sample01.py:9: error: List item 2 has incompatible type "str"; expected "int"
+\end{bashcode}
+
+それではジェネリックを使って先ほどのコードを書き直し、もう一度チェックを書けてみましょう。今回は型エラーが発生しないため、特に何も表示されずmypyが終了します。
+
+\inputpython{./assets/aruneko/sample02.py}
+
+\begin{bashcode}
+mypy sample02.py
+\end{bashcode}
+
+このmypyによる型チェックをCIと組み合わせて、型を合致しないコードがコミットされたときにテストを通らないようにすることで想定外の関数の利用を制限し、より安全なコードを書くヒントを得ることができるメリットがあります。
+
+これで基本的なmypyの使い方と型の書き方が説明できました。それではいよいよ型クラスを作っていきましょう。
+
+\section{型クラスを作る}
+\subsection{型クラス概要}
+型クラスとは、...です。JavaでいうInterfaceに近い概念と説明されることもあります。
+
+今回は特に有名な``Functor''、``Applicative''、``Monad''の3つの型クラスを実装します。これらの型クラスは継承関係にあり、ListやMaybe(ScalaのOption)などよく使われる型を抽象化することができます。それぞれの型クラスの詳細は実装時に詳しく説明します。
+
+\subsection{Functorの実装}
+Functorはリストなどの全要素に関数を一括適用するmap関数をメソッドとして持っている型クラスです。まずFunctorのコードを紹介します。
+
+\inputpython{./assets/aruneko/Functor.py}
+
+先ほども述べたとおり、型クラスはいわゆるインターフェースと類似するものですので、PythonのABCパッケージを使って抽象クラスとして実装していきます。また、Functorはコンテナ的な性質を持つため、Generic[A]を継承してこれ自身がジェネリックであることを明示します。
+
+続いて、mapメソッドの定義を記述します。mapメソッドは1引数関数を取ってそれを適用したFunctorを返すため、Callableを用いて型宣言を行います。ただしPythonではクラスの定義中に自分自身のクラス名を利用することができないため、mypyやPycharmがサポートしているコメントによる型記法を利用します。また、mapは抽象メソッドで実装を持たないため、passを書いて実装がないことを明示します。
+
+\section{List Monadを作る}
+
 
 \section{Maybeを作り出す}
