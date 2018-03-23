@@ -1,0 +1,15 @@
+\documentclass[dvipdfmx,uplatex,a5paper,tombow]{jsarticle}
+\usepackage[size=a4paper]{bxpapersize}% 読み込みだけでOK
+\usepackage[absolute,overlay]{textpos}
+\usepackage{graphicx}
+%\usepackage[colorgrid,gridunit=pt,texcoord]{eso-pic} % ページ上にグリッド線を表示
+\newcommand{\assetspath}{../assets}
+\newcommand{\coverasset}{\assetspath/coverasset}
+\pagestyle{empty}
+
+\begin{document}
+  %\begin{textblock*}{\hsize}(60pt, 60pt)
+    \centering
+    \includegraphics[scale=0.615]{\coverasset/orailly.pdf}
+  %\end{textblock*}
+\end{document}
