@@ -284,3 +284,7 @@ book.pdf
 main.pdf
 
 \.DS_Store
+
+# Python
+.mypy_cache/
+.vscode/
