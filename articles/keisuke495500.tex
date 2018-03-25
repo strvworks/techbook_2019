@@ -96,21 +96,24 @@ Algorithm reproduce from a very old Fortran program (unknown origin!)
 このアルゴリズムのコアとなる乱数の計算ですね．\TeX で書いてる為ごちゃごちゃしていますが
 数式で表すと以下のようになります．
 
-\[
+\begin{equation}\label{eq:LaTeXLGC}
 S_{n+1} = - \frac{S_n}{127773}\times 2836 + (16807S_n \bmod 127773)
-\]
+\end{equation}
 $S_n$が$n$番目に出力した乱数で$S_{n+1}$は$n+1$番目に出力する乱数です．つまり漸化式になっています．
-線形合同法の漸化式と似ていますね．
-線形合同法はC言語のrand関数に採用されているアルゴリズムですが多くの問題点が発見されていて現在は非推奨となっています．
-線形合同法では$16807S_n$の部分が定数ですが，それが乱数を含む形になっています．
-線形合同法の式は以下のとおりです．
-
-\[
+線形合同法の漸化式と似ています．線形合同法はC言語のrand関数に
+採用されているアルゴリズムですが
+多くの問題点が発見されていて現在は非推奨となっています．
+線形合同法の式は以下の通りです．
+\begin{equation}\label{eq:LGC}
 S_{n+1}=(A\times S_n + B) \bmod M \quad \textrm{(A,B,Mは定数)}
-\]
+\end{equation}
+式\eqref{eq:LaTeXLGC}の$(16807S_n \bmod 127773)$の部分が
+式\eqref{eq:LGC}の定数$B$に対応しており，
+更に乱数を含む形になっています．
+式\eqref{eq:LaTeXLGC}の$M$にあたる変数が式\eqref{eq:LGC}に
+ありませんが，これはオーバーフローを利用することによって省略しています．
 
-...構造が非常に似ていますね．
-
+次のコードを見ていきます．
 \begin{texcode}
  \ifnum\FPseed>0%
   \else%
@@ -120,7 +123,7 @@ S_{n+1}=(A\times S_n + B) \bmod M \quad \textrm{(A,B,Mは定数)}
   \global\let\FP@tmp\FP@tmpa%
   \global\FPseed=\FPseed%
 \end{texcode}
-乱数の正規化を行っています．$2147483647(=2^{32}-1)$がこの乱数列における最大値$M$で
+乱数の正規化を行っています．$2147483647(=2^{31}-1)$がこの乱数列における最大値$M$で
 この時点で$n+1$番目の乱数が負の値の場合は$M$を乱数に足します．
 その後FPdivと呼ばれる小数の割り算ができるマクロによって乱数を$M$で割り，乱数を$0\sim 1$の範囲の値に正規化しています．
 \begin{texcode}
@@ -133,5 +136,23 @@ S_{n+1}=(A\times S_n + B) \bmod M \quad \textrm{(A,B,Mは定数)}
 偏りが出たり，周期が短いことが問題となっています．
 この節では，その問題点がFPrandomコマンドにも起こり得ることを検証していきます．
 まずは周期性ですが，線形合同法の周期は$M-1$です．
-FPrandomは$M=214793647$なので周期は$214793646$となります．
-つまり，FPranndomコマンドを$M$回呼び出すと最初の乱数と一致することになります．
+FPrandomは$M=2147483647$なので周期は$2147483646$となります．
+つまり，FPrandomコマンドを$M$回呼び出すと最初の乱数と一致することになります．
+以下の\LaTeX をタイプセットすると最後の乱数が最初の乱数と一致することがわかります．
+\begin{texcode}
+  \documentclass[dvipdfmx,uplatex]{jsarticle}
+  \usepackage[nomessages]{fp}
+  \usepackage{ifthen}
+  \begin{document}
+  \FPseed=156
+  生成した回数 \quad 生成した乱数\\
+  0 \quad \the\FPseed \\
+  \newcounter{mycounter}
+  \setcounter{mycounter}{0}
+  \whiledo{\value{mycounter}<2147483647}{%
+      \FPrandom{\result}%
+      \addtocounter{mycounter}{1}
+      \arabic{mycounter}\quad\the\FPseed\\%
+  }%
+  \end{document}
+\end{texcode}
