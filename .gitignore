@@ -288,3 +288,6 @@ main.pdf
 # Python
 .mypy_cache/
 .vscode/
+
+# Intellij
+.idea/
