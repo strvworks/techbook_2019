@@ -1,65 +1,131 @@
 \section{はじめに}
-皆さんはちょっとしたメモやプログラミングにどんなエディタを使いますか？Vim？それともEmacs？まぁ色々ありますよね．人それぞれ好き嫌いがあると思います．僕はVimを自分好みに拡張するのが好きです\footnote{そこのEmacs教徒，石を投げないで！}．でも，人には自作欲求があります．CPU，OS，言語，更に最近はキーボードなどが人気ですが，エディタも中々面白いですよ．CUIは時代遅れなんてそんなの気にしちゃいけません．ソースコードは\href{https://github.com/takuzoo3868/takdit}{github.com/takuzoo3868/takdit}に置いてあります．
+皆さんはちょっとしたメモやプログラミングにどんなエディタを使いますか？Vim？それともEmacs？まぁ色々ありますよね．
+人それぞれ好き嫌いがあると思います．僕はVimを自分好みに拡張するのが好きです\footnote{そこのEmacs教徒，石を投げないで！}．
+でも，人には自作欲求があります．CPU，OS，言語，更に最近はキーボードなどが人気ですが，エディタも中々面白いですよ．
+CUIは時代遅れなんてそんなの気にしちゃいけません．
+ソースコードは\href{https://github.com/takuzoo3868/takdit}{github.com/takuzoo3868/td}に置いてあります．
 
 \section{準備}
-テキストエディタと言いつつも初めから高機能なエディタを自作するのは至難の業です．そこで，最低限ファイルを編集して保存できるようにする所から始めるといいかなと思います．次にシンタックスハイライト対応や文字列検索機能などを考えていきましょう．リポジトリにあるテキストエディタのファイル構造は以下ようになっています．
+テキストエディタと言いつつも初めから高機能なエディタを自作するのは至難の業です．
+そこで，最低限ファイルを編集して保存できるようにする所から始めるといいかなと思います．
+次にシンタックスハイライト対応や文字列検索機能などを考えていきましょう．
+リポジトリにあるテキストエディタのファイル構造は以下ようになっています．
+
 \begin{figure}[H]
-  \dirtree{%
-  .1 takdit/.
-  .2 modules/ \dotfill  \begin{minipage}[t]{7cm}拡張機能を追加していくディレクトリ{.}\end{minipage}.
-  .3 syntax/ \dotfill  \begin{minipage}[t]{7cm}シンタックスハイライト用の構造体を定義{.}\end{minipage}.
-  .2 LICENSE.
-  .2 Makefile.
-  .2 README.md.
-  .2 takdit.c \dotfill  \begin{minipage}[t]{7cm}メインとなるソースコード{.}\end{minipage}.
-  .2 takdit.h \dotfill  \begin{minipage}[t]{7cm}定数定義や構造体を含むヘッダ{.}\end{minipage}.
-  }
+    \dirtree{%
+    .1 takdit/.
+    .2 modules/ \dotfill  \begin{minipage}[t]{7cm}
+                              拡張機能を追加していくディレクトリ{.}
+    \end{minipage}.
+    .3 syntax/ \dotfill  \begin{minipage}[t]{7cm}
+                             シンタックスハイライト用の構造体を定義{.}
+    \end{minipage}.
+    .2 LICENSE.
+    .2 Makefile.
+    .2 README.md.
+    .2 takdit.c \dotfill  \begin{minipage}[t]{7cm}
+                              メインとなるソースコード{.}
+    \end{minipage}.
+    .2 takdit.h \dotfill  \begin{minipage}[t]{7cm}
+                              定数定義や構造体を含むヘッダ{.}
+    \end{minipage}.
+    }
 \end{figure}
 外部ライブラリに依存しない事を目標としていますが，Cコンパイラと\mintinline{bash}{make}コマンドは準備する必要があります．
-\mintinline{bash}{cc --version}や\mintinline{bash}{make -v}でインストールされているかどうか確認できます．自身の環境にコンパイラがインストールされていなかった場合は，Google先生に聞いてみましょう．
+\mintinline{bash}{cc --version}や\mintinline{bash}{make -v}でインストールされているかどうか確認できます．
+自身の環境にコンパイラがインストールされていなかった場合は，Google先生に聞いてみましょう．
 
 \subsubsection{makeによるコンパイル}
-解説のために本文中では\mintinline{bash}{takdit}と記載しますが，好きな名前に置き換えて下さい\footnote{4文字程度が打ちやすくていい感じです．私は馬鹿なので6文字も使ってしまいました．}．\mintinline{bash}{cc takdit.c -o takdit}などと打ち込めばコンパイルできます．しかし試行錯誤を繰り返すため，再コンパイルの度に同じ事をするのはあまりスマートではありません．\mintinline{bash}{make}を用いることでプログラムコンパイルを少しだけ楽にしておきましょう．\mintinline{bash}{Makefile}を作成し，以下の内容を記述しておきます．
+解説のために本文中では\mintinline{bash}{hoge}と記載しますが，
+好きな名前に置き換えて下さい．．
+\mintinline{bash}{cc hoge.c -o hoge}などと打ち込めばコンパイルできます．
+しかし試行錯誤を繰り返すため，再コンパイルの度に同じ事をするのはあまりスマートではありません．
+\mintinline{bash}{make}を用いることでプログラムコンパイルを少しだけ楽にしておきましょう．
+\mintinline{bash}{Makefile}を作成し，以下の内容を記述しておきます．
 \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{text}
-  takdit: takdit.c
-  $(CC) -o takdit takdit.c -Wall -W -pedantic -std=c99
+hoge: hoge.c
+$(CC) -o hoge hoge.c -Wall -W -pedantic -std=c99
 \end{minted}
-この辺については，準備段階なので詳細は省きます．とてもざっくりに言いますと，諸々の構文をチェックして警告を表示してくれるようオプションを設定しています．これで準備は完了です．
+この辺については，準備段階なので詳細は省きます．とてもざっくりに言いますと，
+諸々の構文をチェックして警告を表示してくれるようオプションを設定しています．これで準備は完了です．
 
 \section{基本構成}
 基本となる骨格はkiloというテキストエディタを参考にします\footnote{\href{https://github.com/antirez/kilo}{github.com/antirez/kilo}}．
 Salvatore Sanfilippo氏によって開発されたC言語製のエディタです．BSD 2-clauseにて公開されています．
 紹介文に，
 \begin{quote}
-  Kilo is a small text editor in less than 1K lines of code (counted with cloc).
+Kilo is a small text editor in less than 1K lines of code (counted with cloc).
 \end{quote}
 とあるように1000行程度なので目で追っていくもの問題ないでしょう．ちょっと厳しいという方は\mintinline{c}{int main()}だけでも目を通す事をお勧めします．
 \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/main.c}
-処理の流れはコメントにあるように，
+処理の流れはコメントの通り，
 \begin{enumerate}
-  \item 起動にあたりエディタの初期化
-  \item 引数にあるファイルの拡張子に対応したシンタックスハイライトを適用
-  \item ファイルをメモリ上へ展開
-  \item エスケープシーケンスを利用してターミナルをRawモードへ変更
-  \item ループ処理
+\item 起動にあたりエディタの初期化
+\item 引数にあるファイルの拡張子に対応したシンタックスハイライトを適用
+\item ファイルをメモリ上へ展開
+\item エスケープシーケンスを利用してターミナルをRaw modeへ変更
+\item ループ処理
 \end{enumerate}
-となります．ループでは画面反映とキー入力待ちを行っています．本書では基本構造として上記の5点を解説します．
-編集対象ファイルの内容をメモリに読み込み，一つの文字列データとして確保\footnote{\mintinline{c}{char*}でアクセスされるヒープ上のメモリ領域}．
-
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/struct.c}
-
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/initEditor.c}
-
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/editorSelectSyntaxHighlight.c}
-
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/editorOpen.c}
-
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/enableRawMode.c}
-
- \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/enableRawMode.c}
+となります．ループでは画面反映とキー入力待ちを行っています．本書では入門編という事でRaw modeの作成を一緒に頑張っていきましょう．
 
 \section{Build your own Editor!!!}
-コンパクトなCUIベースのテキストエディタですが，実際の使用には難が多くあります．改善点を列挙しますと，
+\subsection{Step.1 Raw modeの作成}
+ここまでで自作エディタのための開発環境構築は終わっているものとします．
+プログラムを書くために，どのエディタを使うかはご自身の信条に従って下さい．
+それでは最初の一歩です．以下のコードを書いてみましょう．
+\inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/step1_1.c}
+\mintinline{c}{unistd.h}から\mintinline{c}{read()}と\mintinline{c}{STDIN_FILENO}を呼び出しています．
+\mintinline{c}{read()}は標準入力から1byteを変数\mintinline{c}{c}に読み込んで，読み取るバイトデータがなくなるまで繰り返すようにしてあります．
+コンパイルしプログラムを実行すると，端末は標準入力に接続され，キーボードの入力が変数\mintinline{c}{c}に読み込まれます
+\footnote{プログラムを終了する場合はCtrl-Dで\mintinline{c}{read()}へ最後へ到達したことを知らせるか，Ctrl-Cでプロセスを終了します．}．
+しかし，多くの場合端末は\mintinline{bash}{canonical mode}で起動\footnote{\mintinline{bash}{cooked mode}とも言います}するので，
+\mintinline{bash}{raw mode}へ切り替える必要があります．
+\mintinline{bash}{canonical mode}はEnterキーを押す事でキーボード入力がプログラムへ渡されます．
+テキストエディタの場合は，複雑なインターフェースに加え，キーを押したあとにすぐ処理をしたいので\mintinline{bash}{canonical mode}が適しているとは言えません．
+というこで，端末を\mintinline{bash}{raw mode}へ変更しますが，端末内部のフラグをoffにする必要があるので徐々に解説します．
 
-\subsection{シンタックスハイライト対応}
-ヘッダーファイルとしてシンタックスハイライトをまとめた構造体を作成します．
+\subsubsection{\mintinline{bash}{ECHO}をoffにする}
+端末の\mintinline{bash}{ECHO}機能は入力したキー情報が端末画面に表示され，内容を確認できる優れた機能です．
+しかし，レンダリングにおいて\mintinline{bash}{raw mode}では適していないのも事実です．よってoffにしちゃいましょう
+\footnote{\mintinline{bash}{sudo}でパスワードを入力するイメージに近いです．}．
+\inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/step1_2.c}
+手順としては\mintinline{c}{tcgetattr()}を使用して現在の属性を\mintinline{c}{termios}構造体へ読み込み，構造体の変更，
+変更された構造体を\mintinline{c}{tcgetattr()}へ渡し，新しい端末属性を書き込むという事をしています．
+\mintinline{c}{TCSAFLUSH}は変更をいつ適用するかを指定する引数です．
+\mintinline{c}{c_lflag}はローカル用のフラグです．雑多なフラグを管理するためにあります\footnote{macOSの\mintinline{c}{termios.h}には"Local" flags - dumping ground for other stateと書いてあります．}．
+そのほか\mintinline{bash}{raw mode}の有効化に関連して変更するフラグは，\mintinline{c}{c_iflag}の入力フラグ，\mintinline{c}{c_oflag}の出力フラグ，\mintinline{c}{c_cflag}の制御フラグです．
+
+次に必要な要素として，プログラムの終了時は端末の元の属性を復元してあげる必要があります．
+\mintinline{c}{atexit()}はプログラム終了時に自動的に\mintinline{c}{disableRawMode}を呼び出すために使用します．
+端末の元の属性は，\mintinline{c}{orig_termios}構造体に保存しておきます．
+
+\subsubsection{\mintinline{bash}{canonical}のoffとキー入力}
+\mintinline{bash}{canonical mode}をoffにするフラグは\mintinline{c}{termios.h}にある\mintinline{c}{ICANON}です．
+offにすることで行単位ではなくバイト単位で入力を読み取ることになります．
+先程のプログラムの15行目を\mintinline{c}{raw.c_lflag &= ~(ECHO | ICANON);}へ変更し実行してみましょう．
+終了時はqキーを押せば大丈夫です．これで\mintinline{bash}{raw mode}へ移行できるようになりました．
+それでは入力の様子を知るべく，\mintinline{c}{read()}で読み込んだ各バイトを出力してみましょう．
+\inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/step1_3.c}
+実行してみると画面にキー入力の結果，どのようにバイト変換されているか表示されるはずです．
+\mintinline{c}{iscntrl()}は入力が制御文字かどうか調べてくれます．制御文字とは，画面上に表示できないASCIIコード\footnote{http://www.asciitable.com/}の事を指します．
+
+\subsubsection{出力処理のoffとエラー処理}
+ここまで完了したらあとはテキストエディタ用に雑多な処理を記述するだけです．コードは少し長くなります．
+\inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/step1_4.c}
+どんな処理を追加したかというと，Ctrl-C，Ctrl-Z，Ctrl-S，Ctrl-Q，Ctrl-Vを無効化し，Ctrl-Mを\mintinline{bash}{carriage return}へ修正．
+さらに\mintinline{c}{termios.h}に記載されているいくつかのフラグを無効化しています．あとはエラー処理と\mintinline{c}{read()}のタイムアウトなんかも設定しています．
+なんか説明が雑だなと思ったあなたごめんなさい\footnote{実装内容やプログラムの詳細については次の執筆機会か，あるいは自分のブログに書きます． http://takuzoo3868.hatenablog.com/}．ページの都合です\verb#(´；ω；｀)#
+
+\section{おわりに}
+今回は入門編という事で\mintinline{bash}{raw mode}の実装のみに絞りました．
+今後プログラムとして実装するステップを述べておくと，
+\begin{enumerate}
+\item Raw modeにおける入出力処理
+\item テキストビューワーの作成
+\item 編集処理
+\item 文字列検索機能
+\item シンタックスハイライト
+\end{enumerate}
+となります．自分のリポジトリではこれらステップを全て実装済みなのでコードを確認していただけると良いかなと思います．
+勿論GUIアプリケーションとして開発したい方もいるでしょう．自分も今実践中なのでもし興味ある方は連絡\footnote{https://takuzoo3868.github.io/}ください！
+それでは，よい自作ライフを！！！
