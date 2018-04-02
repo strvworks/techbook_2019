@@ -27,7 +27,7 @@
 kthread.hがカーネルスレッドに関する色々を格納していてsched.hがカーネルで扱うプロセスやそれに必要不可欠な構造体を含んでいる。
 
 \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}
-    #include <linux/kthread.h>
+#include <linux/kthread.h>
 #include <linux/sched.h>
 
 struct task_struct *task;
@@ -46,59 +46,55 @@ static int kthread_cb(void *arg){
 \end{minted}
 
 グローバル変数として構造体をデータ型に持つ変数を宣言している。これにプロセスとして起動したい処理等を渡す。
-上記の関数ではカーネルスレッドとして実際に動作する処理を記述している。
+上記の関数ではカーネルスレッドとして実際に動作する処理を記述している。それを次のようにモジュール側で使用してみる。
 
-それを次のようにモジュール側で使用してみる。
 \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}
-    static int fastecho_init_module(void){
+static int fastecho_init_module(void){
 
-        printk("Fastest Echo Server Start!!");
+    printk("Fastest Echo Server Start!!");
 
-        //make kernel thread
-        task = kthread_create(kthread_cb, NULL, "lrf141:fastecho");
+    //make kernel thread
+    task = kthread_create(kthread_cb, NULL, "lrf141:fastecho");
         
-        printk("[%s] wake up as kthread\n", task->comm);
+    printk("[%s] wake up as kthread\n", task->comm);
 
-        //launch task
-        wake_up_process(task);
+    //launch task
+    wake_up_process(task);
         
-        return 0;
+    return 0;
 }
 
 static void fastecho_cleanup_module(void){
 
-        printk("Fastest Echo Server is unloaded!");
-        printk("[%s] stop kthread\n", task->comm);
-        kthread_stop(task);
+    printk("Fastest Echo Server is unloaded!");
+    printk("[%s] stop kthread\n", task->comm);
+    kthread_stop(task);
 
 }
 \end{minted}
 
 ここまで書いたものをビルドし、insmodでカーネルに組み込むと以下のような標準出力をdmesgでみることができる。
 \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{bash}
-  $ make
+$ make
 $ sudo insmod fastecho.ko
-$ ps auwx | grep "\[lrf141:faste
-cho\]"
-root     30557 98.3  0.0      0     0 ?        R    16:49   0:05 [lrf141:fast
-echo]
+$ ps auwx | grep "\[lrf141:fastecho\]"
+root     30557 98.3  0.0      0     0 ?        R    16:49   0:05 [lrf141:fastecho]
 $ dmesg
 [176532.823327] Fastest Echo Server Start!!
 [176532.826178] [lrf141:fastecho] wake up as kthread
 [176532.827453] [lrf141:fastecho] running as kthread
-[176586.304842] Fastest Echo Server is unloaded![lrf141:fastecho] stop kthrea
-d
+[176586.304842] Fastest Echo Server is unloaded![lrf141:fastecho] stop kthread
 $ sudo rmmod fastecho.ko
 \end{minted}
 
 \section{ソケット関連}
 
 前節で、カーネルスレッドを用いてマルチスレッドのような機能を実現できることはわかったのでメインとなるソケットを用いた処理に関連するものを準備する。
-elixir.free-electrons.com/linuxというサイトにカーネルに使用されているヘッダーやソースファイルを閲覧できる色々があったのでこれを用いる。
+bootlin\footnote{\url{https://elixir.bootlin.com/linux/latest/source}}というサイトにカーネルに使用されているヘッダーやソースファイルを閲覧できる機能があるのでこれを用いる。
 まずはlinux/net.hというヘッダーにsocket構造体が存在していた。これがカーネルで使用されるソケットらしい。
 中身は次のようになっている。
 \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}
-    /**
+/**
  *  struct socket - general BSD socket
  *  @state: socket state (%SS_CONNECTED, etc)
  *  @type: socket type (%SOCK_STREAM, etc)
@@ -109,19 +105,19 @@ elixir.free-electrons.com/linuxというサイトにカーネルに使用され�
  *  @wq: wait queue for several uses
  */
 struct socket {
-	socket_state		state;
+    socket_state        state;
 
-	kmemcheck_bitfield_begin(type);
-	short			type;
-	kmemcheck_bitfield_end(type);
+    kmemcheck_bitfield_begin(type);
+    short           type;
+    kmemcheck_bitfield_end(type);
 
-	unsigned long		flags;
+    unsigned long         flags;
 
-	struct socket_wq __rcu	*wq;
+    struct socket_wq __rcu  *wq;
 
-	struct file		*file;
-	struct sock		*sk;
-	const struct proto_ops	*ops;
+    struct file     *file;
+    struct sock     *sk;
+    const struct proto_ops  *ops;
 };
 \end{minted}
 
@@ -130,40 +126,36 @@ struct socket {
 これを本来は使っていくべきなのだろうが、素で呼び出すと色々と呼び出すものが増えて厄介になるので、それらのラッパーである\verb|sock_reate|関数や\verb|kernel_bind|関数、\verb|kernel_listen|関数を駆使することとする。
 
 \section{文字列関連}
-次に問題になるのが、ソケットで通信周りを扱った後のレスポンスをどう捌く、扱うかである。
+次に問題になるのが、ソケットで通信周りを扱った後のレスポンスをどう扱うかである。
 これには非常に苦戦を強いられた。なぜなら、多くの文献で紹介されているmsghdr構造体が後の仕様変更で大幅に変更されていて従来の方法でiovec構造体を扱うことが出来ないためである。
 
-正確には扱うことができるが、それこそソケット周りの様に素で扱うためにはかなりのコードを書く必要がある。
-そのため今回は、kvec構造体を使用してリクエストの送受信に\verb|kernel_recvmsg|と\verb|kernel_sendmsg|関数を使用して実現することにした。
+正確には扱うことができるが、それこそソケット周りのように素で扱うためにはかなりのコードを書く必要がある。
+そのため今回は、kvec構造体を使用してリクエストの送受信に\verb|kernel_recvmsg|と\verb|kernel_sendmsg|関数を使用して実現することにした。これを用いることで従来と同様の結果を得ることができるようになった。
 
-これを用いることで従来と同様の結果を得ることができるようになった。
-
-実際にカーネルに使用されているヘッダーでは次のように宣言されている。
+実際にカーネルに使用されているヘッダーでは次のように宣言されている。使用方法に関しては、iovecとさほど変わらない。
 \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}
-  struct kvec {
-	void *iov_base; /* and that should *never* hold a userland pointer */
-	size_t iov_len;
+struct kvec {
+    void *iov_base; /* and that should *never* hold a userland pointer */
+    size_t iov_len;
 };
 \end{minted}
 \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}
-  /*
- *	As we do 4.4BSD message passing we use a 4.4BSD message passing
- *	system, not 4.3. Thus msg_accrights(len) are now missing. They
- *	belong in an obscure libc emulation or the bin.
+/*
+ *  As we do 4.4BSD message passing we use a 4.4BSD message passing
+ *  system, not 4.3. Thus msg_accrights(len) are now missing. They
+ *  belong in an obscure libc emulation or the bin.
  */
  
 struct msghdr {
-	void		*msg_name;	/* ptr to socket address structure */
-	int		msg_namelen;	/* size of socket address structure */
-	struct iov_iter	msg_iter;	/* data */
-	void		*msg_control;	/* ancillary data */
-	__kernel_size_t	msg_controllen;	/* ancillary data buffer length */
-	unsigned int	msg_flags;	/* flags on received message */
-	struct kiocb	*msg_iocb;	/* ptr to iocb for async requests */
+    void        *msg_name;  /* ptr to socket address structure */
+    int     msg_namelen;    /* size of socket address structure */
+    struct iov_iter msg_iter;   /* data */
+    void        *msg_control;   /* ancillary data */
+    __kernel_size_t msg_controllen; /* ancillary data buffer length */
+    unsigned int    msg_flags;  /* flags on received message */
+    struct kiocb    *msg_iocb;  /* ptr to iocb for async requests */
 };
 \end{minted}
-
-使用に関しては、iovecとさほど変わらない。
 
 \section{Echoサーバの実装}
 ここまで解説したものを全て用いて、Echoサーバをカーネルモジュールとして実現したのが以下のコード群である。

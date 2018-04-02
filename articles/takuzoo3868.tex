@@ -3,7 +3,7 @@
 人それぞれ好き嫌いがあると思います．僕はVimを自分好みに拡張するのが好きです\footnote{そこのEmacs教徒，石を投げないで！}．
 でも，人には自作欲求があります．CPU，OS，言語，更に最近はキーボードなどが人気ですが，エディタも中々面白いですよ．
 CUIは時代遅れなんてそんなの気にしちゃいけません．
-ソースコードは\href{https://github.com/takuzoo3868/takdit}{github.com/takuzoo3868/td}に置いてあります．
+ソースコードは\url{https://github.com/takuzoo3868/takdit}に置いてあります．
 
 \section{準備}
 テキストエディタと言いつつも初めから高機能なエディタを自作するのは至難の業です．
@@ -37,7 +37,7 @@ CUIは時代遅れなんてそんなの気にしちゃいけません．
 
 \subsubsection{makeによるコンパイル}
 解説のために本文中では\mintinline{bash}{hoge}と記載しますが，
-好きな名前に置き換えて下さい．．
+好きな名前に置き換えて下さい．
 \mintinline{bash}{cc hoge.c -o hoge}などと打ち込めばコンパイルできます．
 しかし試行錯誤を繰り返すため，再コンパイルの度に同じ事をするのはあまりスマートではありません．
 \mintinline{bash}{make}を用いることでプログラムコンパイルを少しだけ楽にしておきましょう．
@@ -50,7 +50,7 @@ $(CC) -o hoge hoge.c -Wall -W -pedantic -std=c99
 諸々の構文をチェックして警告を表示してくれるようオプションを設定しています．これで準備は完了です．
 
 \section{基本構成}
-基本となる骨格はkiloというテキストエディタを参考にします\footnote{\href{https://github.com/antirez/kilo}{github.com/antirez/kilo}}．
+基本となる骨格はkiloというテキストエディタを参考にします\footnote{\url{https://github.com/antirez/kilo}}．
 Salvatore Sanfilippo氏によって開発されたC言語製のエディタです．BSD 2-clauseにて公開されています．
 紹介文に，
 \begin{quote}
