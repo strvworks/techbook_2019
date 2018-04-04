@@ -73,7 +73,7 @@ static void fastecho_cleanup_module(void){
 }
 \end{minted}
 
-ここまで書いたものをビルドし、insmodでカーネルに組み込むと以下のような標準出力をdmesgでみることができます。
+ここまで書いたものをビルドし、insmodでカーネルに組み込むと以下のような標準出力をdmesgで確認することができます。
 \begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{bash}
 $ make
 $ sudo insmod fastecho.ko
@@ -89,7 +89,7 @@ $ sudo rmmod fastecho.ko
 
 \section{ソケット関連}
 
-前節で、カーネルスレッドを用いてマルチスレッドのような機能を実現できることはわかったのでメインとなるソケットを用いた処理に関連するものを準備します。
+前節で、カーネルスレッドを用いてマルチスレッドのような機能を実現できることはわかったので、メインとなるソケットを用いた処理に関連するものを準備します。
 bootlin\footnote{\url{https://elixir.bootlin.com/linux/latest/source}}というサイトにカーネルに使用されているヘッダーやソースファイルを閲覧できる機能があるのでこれを使用します。
 まずはlinux/net.hというヘッダーにsocket構造体が存在します。これがカーネルで使用されるソケットとして使用することができます。
 中身は次のようになっています。
@@ -163,7 +163,7 @@ struct msghdr {
 最初に記述したソースファイル２つがソケットやスレッド周りの実装となっています。
 \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\lrfasset/echo_server.c}
 \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\lrfasset/echo_server.h}
-次の２つがカーネルモジュールとして動作させるために必要な実装となる。
+次の２つがカーネルモジュールとして動作させるために必要な実装です。
 \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\lrfasset/fastecho.h}
 \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\lrfasset/fastecho_module.c}
 
