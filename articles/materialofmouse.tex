@@ -25,7 +25,7 @@
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=60mm]{./assets/mouse/gray/1.JPG}
+    \includegraphics[width=60mm]{./assets/mouse/1.JPG}
     \caption{LED1個で電流と電圧を測定している様子}
     \label{fig:led1}
 \end{figure}
@@ -41,7 +41,7 @@ LED2個を直列に接続し、その両端をテスターで見ていきます�
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=60mm]{./assets/mouse/gray/12.JPG}
+    \includegraphics[width=60mm]{./assets/mouse/12.JPG}
     \caption{LED2個で電流と電圧を測定している様子}
     \label{fig:led2}
 \end{figure}
@@ -55,7 +55,7 @@ LED2個の時と比べて電圧が極端に小さくなっていることがわ�
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=60mm]{./assets/mouse/gray/4.JPG}
+    \includegraphics[width=60mm]{./assets/mouse/4.JPG}
     \caption{10個のLEDを接続しているブレッドボード}
     \label{fig:led10}
 \end{figure}
@@ -67,7 +67,7 @@ LED2個の時と比べて電圧が極端に小さくなっていることがわ�
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=60mm]{./assets/mouse/gray/13.JPG}
+    \includegraphics[width=60mm]{./assets/mouse/13.JPG}
     \caption{並列接続したLEDの電流と電圧を測定している様子}
     \label{fig:led_par}
 \end{figure}
@@ -82,7 +82,7 @@ LED2個の時と比べて電圧が極端に小さくなっていることがわ�
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=60mm]{./assets/mouse/gray/5.JPG}
+    \includegraphics[width=60mm]{./assets/mouse/5.JPG}
     \caption{LED10個を並列接続しているブレッドボード}
     \label{fig:led_par10}
 \end{figure}
@@ -92,7 +92,11 @@ LED2個の時と比べて電圧が極端に小さくなっていることがわ�
 とりあえず並列でのほうがLEDを光らせるのには現実的な発電量なので、
 
 \subsection{LEDを30個並べる}
-\textcolor{red}{[以下の実験の説明などを入れる]}
+
+先ほど取れたデータからだと、
+LEDを３０こ並列に並べると1.2\si{\milli\ampere}発生するはずです。
+他の実験と同じ日に行いたかったのですが、太陽が沈んでしまったので別の日に実験しました。
+
 \begin{description}
   \item[場所]{ちかくの駐車場}
   \item[時刻]{14:30}
@@ -101,12 +105,9 @@ LED2個の時と比べて電圧が極端に小さくなっていることがわ�
 \end{description}
 
 
-理論値だとLEDを30個並列に並べれば単純計算で1.2\si{\milli\ampere}発生するはずです。
-他の実験と同じ日に行いたかったのですが、太陽沈んでしまったので別の日に実験しました。
-
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=60mm]{./assets/mouse/gray/10.JPG}
+    \includegraphics[width=60mm]{./assets/mouse/10.JPG}
     \caption{LEDを30個並べた様子}
     \label{fig:led_par30}
 \end{figure}
@@ -120,6 +121,7 @@ LED2個の時と比べて電圧が極端に小さくなっていることがわ�
 LEDにも波長特性はあります。
 なので、LEDの色によって発電量も変わってきますし、光源の波長特性によっても全然違います。
 場所、光源、LEDをしっかり選ぶとより良い発電ができるかもしれません。
+今度やります。
 
 \section{最後に}
 LEDで発電するのはあまりお勧めできません。
