@@ -97,7 +97,7 @@ Algorithm reproduce from a very old Fortran program (unknown origin!)
 数式で表すと以下のようになります．
 
 \begin{equation}\label{eq:LaTeXLGC}
-S_{n+1} = - \frac{S_n}{127773}\times 2836 + (16807S_n \bmod 127773)
+S_{n+1} = - \frac{S_n}{127773}\times 2836 + 16807(S_n \bmod 127773)
 \end{equation}
 $S_n$が$n$番目に出力した乱数で$S_{n+1}$は$n+1$番目に出力する乱数です．つまり漸化式になっています．
 線形合同法の漸化式と似ています．線形合同法はC言語のrand関数に
@@ -107,7 +107,7 @@ $S_n$が$n$番目に出力した乱数で$S_{n+1}$は$n+1$番目に出力する�
 \begin{equation}\label{eq:LGC}
 S_{n+1}=(A\times S_n + B) \bmod M \quad \textrm{(A,B,Mは定数)}
 \end{equation}
-式\eqref{eq:LaTeXLGC}の$(16807S_n \bmod 127773)$の部分が
+式\eqref{eq:LaTeXLGC}の$16807(S_n \bmod 127773)$の部分が
 式\eqref{eq:LGC}の定数$B$に対応しており，
 更に乱数を含む形になっています．
 式\eqref{eq:LaTeXLGC}の$M$にあたる変数が式\eqref{eq:LGC}に

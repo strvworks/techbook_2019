@@ -34,27 +34,27 @@
 \define@key{impression}{name}{\def\booktitle{#1}} % 本のタイトルの定義
 \define@key{impression}{author}{\def\bookauthors{#1}} % 本の著者名の定義
 \define@key{impression}{date}{\def\publishdate{#1}} % 発行年月日の定義
-\define@key{impression}{illust}{\def\illustrators{#1}} % 挿絵の定義
+\define@key{impression}{publisher}{\def\publisher{#1}} % 発行の定義
 \define@key{impression}{print}{\def\printingoffice{#1}} % 印刷所の定義
 
-\newcommand{\myimpression}[1][name=タイトル,author=俺,date=\today,illust=俺,print=俺]{%
+\newcommand{\myimpression}[1][name=タイトル,author=俺,date=\today,publisher=俺,print=俺]{%
 \setkeys{impression}{#1}
 \thispagestyle{empty}
 \vspace*{\stretch{1}}
 \begin{flushright}
 \begin{minipage}{0.7\hsize}
 \textbf{\Large \booktitle}\\
-\hrulefill
+\hrulefill \\
+\publishdate \ 初版第1刷発行
 \begin{description}
   \item{著者：}\bookauthors
-  \item{挿絵：}\illustrators
-  \item{発行：}\publishdate
+  \item{発行：}\publisher
   \item{印刷：}\printingoffice
 \end{description}
 \hrulefill \\
 落丁，乱丁の際でもお取り替えしません． \\\\
 本書は著作権上の保護を受けているのかよく分かりません．本書の一部あるいは全部について，LOCAL学生部から
-文書の許諾を得るよりもgithubのリポジトリからコピペした方が早いと思いますよ．
+文書の許諾を得るよりもgithubのリポジトリからコピペした方が早いと思います．
 \end{minipage}
 \end{flushright}
 }
