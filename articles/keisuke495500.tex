@@ -33,8 +33,7 @@
 標準実装されているアルゴリズムも昔のものである場合が多く，
 いわゆる問題点があるアルゴリズムであることもあります．
 本章ではプログラミング言語の中でも\LaTeX に実装されている
-疑似乱数アルゴリズムについて解説し，
-改善するためにモダンな疑似乱数アルゴリズムを\LaTeX で実装していきます．
+疑似乱数アルゴリズムについて解説し，周期性や偏りについて検証していきます．
 \section{乱数生成コマンド}
 \LaTeX のパッケージに固定小数演算ができるFPパッケージがあります．
 \subsection{固定小数演算}
@@ -64,7 +63,6 @@ FPseedでシード値を決めてからFPrandomを使って変数に乱数を格
 Algorithm reproduce from a very old Fortran program (unknown origin!)
 \end{quote}
 どうやら大昔のFortranの疑似乱数アルゴリズムを\TeX に起こしたものがFPrandomの正体みたいですね．
-これはいろいろ問題点がありそうですね．
 更にその下のコメントにはFortranで書かれた疑似乱数アルゴリズムらしきものがあります．
 これを読んでいけばどんなアルゴリズムが使われているか分かりますがそれではつまらないので
 コメントを抜けた後の\TeX で書かれた疑似乱数アルゴリズムの方を見ていきましょう．
@@ -131,28 +129,75 @@ S_{n+1}=(A\times S_n + B) \bmod M \quad \textrm{(A,B,Mは定数)}
 \end{texcode}
 最後に，FPrandomの第一引数に算出した乱数を代入して終了です．
 \subsubsection{実際に出力してみる}
-前節でFPrandomは線形合同法が用いられていることが分かりました．
+前節でFPrandomは線形合同法を改変したものが用いられていることが分かりました．
 しかし，線形合同法は実装が簡単にできる分，構造が単純で，
 偏りが出たり，周期が短いことが問題となっています．
-この節では，その問題点がFPrandomコマンドにも起こり得ることを検証していきます．
-まずは周期性ですが，線形合同法の周期は$M-1$です．
-FPrandomは$M=2147483647$なので周期は$2147483646$となります．
-つまり，FPrandomコマンドを$M$回呼び出すと最初の乱数と一致することになります．
-以下の\LaTeX をタイプセットすると最後の乱数が最初の乱数と一致することがわかります．
+この節では，その問題点がFPrandomコマンドにも起こるかどうかを検証していきます．
+まずは分かりやすい規則性についてですが，線形合同法の代表的な
+規則性として「偶数と奇数が交互に生成される」という性質を持っています．
+以下の\LaTeX のソースをタイプセットすると，
+結果が分かります．
 \begin{texcode}
   \documentclass[dvipdfmx,uplatex]{jsarticle}
   \usepackage[nomessages]{fp}
   \usepackage{ifthen}
+  \FPseed = 1
   \begin{document}
-  \FPseed=156
-  生成した回数 \quad 生成した乱数\\
+  生成した回数 \quad 生成した乱数 \\
   0 \quad \the\FPseed \\
   \newcounter{mycounter}
   \setcounter{mycounter}{0}
-  \whiledo{\value{mycounter}<2147483647}{%
-      \FPrandom{\result}%
-      \addtocounter{mycounter}{1}
-      \arabic{mycounter}\quad\the\FPseed\\%
-  }%
+
+  \whiledo{\value{mycounter}<1000}{%
+  \FPrandom{\result}%
+  \addtocounter{mycounter}{1}
+  \arabic{mycounter}\quad\the\FPseed\\%
+  }
   \end{document}
 \end{texcode}
+タイプセットしてみると，偶数と奇数は交互に出てきません．
+よって，規則性については線形合同法から改良されています．
+
+次に周期性ですが，線形合同法の最大周期は$M-1$です．
+FPrandomは$M=2147483647$なので周期は$2147483646$となります．
+つまり，FPrandomコマンドを$M$回呼び出すと最初の乱数と一致することになります．
+\LaTeX で検証したいところですが，FPrandomコマンドはとても遅く，
+また，\TeX のメモリ制限によって，最後まで出力できないので．
+Pythonで検証をしてみます．
+\captionof{listing}{Pythonで実装したFPrandomのアルゴリズム}
+\inputpython{\keisukeasset/latex_lcg.py}
+\captionof{listing}{周期性の検証プログラム}
+\inputpython{\keisukeasset/periodicity.py}
+時間がかかりますが，$M$回乱数を生成しても，
+最初の乱数と一致しないので，周期も通常の線形合同法に
+比べて長くなっているようです．
+具体的な周期の長さについては検証する時間がありませんでしたが，
+またいつか，検証したいと思います．
+
+次に偏りについての検証です．線形合同法は3次元以上の
+乱数の一様性については保証されていません．
+通常の線形合同法で生成した乱数を3次元空間上に
+プロットすると，空間上にプロット点で構成された層の
+ような模様が浮かび上がり，点が一様にプロットされません．
+FPrandomではこのような問題点がないかを検証します．
+周期性と同じくPythonで検証していきます．
+\captionof{listing}{偏りの検証プログラム}
+\label{lst:bias}
+\inputpython{\keisukeasset/bias.py}
+Listing \ref{lst:bias}で書き込まれたcoodinates.datを
+gnuplotでプロットしてみると，
+図\ref{fig:bias}のようになります．
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=60mm]{\keisukeasset/keisuke495500_graph_gray.pdf}
+  \caption{FPrandomのアルゴリズムを元に2000個の乱数を3次元上にプロットしたグラフ}
+  \label{fig:bias}
+\end{figure}
+通常の線形合同法と違い，かなり一様に分布しているように見えます．
+偏りについても特に問題がないように思えます．
+
+\section{おわりに}
+今回，FPrandomの疑似乱数生成アルゴリズムについての検証を行いました．
+しかし，今回の検証では特に問題がありませんでした．
+次回は，具体的な周期の長さや\LaTeX の他の乱数を生成する
+パッケージ(lcgパッケージ)などについての検証も行っていきたいと思います．
