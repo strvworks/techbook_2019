@@ -25,3 +25,5 @@ def test_monad_3rd_low(self):
 
     def g(x):
         return Seq(x * 2)
+
+    self.assertEqual(seq.flat_map(f).flat_map(g), seq.flat_map(lambda x: f(x).flat_map(g)))
