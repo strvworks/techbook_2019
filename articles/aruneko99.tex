@@ -104,9 +104,9 @@ Seq.py:39: error: Argument 1 of "flat_map" incompatible with supertype "Monad"
 \end{bashcode}
 
 \subsection{遊んでみる}
-せっかく作ったSeqクラスで少し遊んでみます．せっかくなのでMonad則を証明してみましょう．実行してみて全てのテストをパスできれば大成功です\footnote{もちろん成功しますよ！}．
+せっかく作ったSeqクラスで少し遊んでみます．せっかくなのでMonad則\footnote{Monad則について解説するには余白が少なすぎました}を証明してみましょう．実行して全てのテストをパスできれば大成功です\footnote{もちろん成功しますよ！}．
 
-Pythonで書いているはずなのに，本当にRubyやScalaっぽくメソッドチェーンで書けてしまうので楽しいですね\footnote{欲をいえばLambda式をもうちょっと短く書きたいのですが......}．しかもPyCharmなど型アノテーションを読み取って補完情報に使ってくれる環境では引数にどんな型が必要かなどの情報を出してくれるので，コーディングがはかどります．
+Pythonで書いているはずなのに，本当にRubyやScalaっぽくメソッドチェーンで書けてしまうので楽しいですね．しかもPyCharmなど型アノテーションを読み取って補完情報に使ってくれる環境では引数にどんな型が必要かなどの情報を出してくれるので，コーディングがはかどります．
 
 \inputpython{./assets/aruneko/test_seq.py}
 
