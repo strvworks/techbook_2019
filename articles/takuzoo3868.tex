@@ -112,13 +112,74 @@ offにすることで行単位ではなくバイト単位で入力を読み取�
 \subsubsection{出力処理のoffとエラー処理}
 ここまで完了したらあとはテキストエディタ用に雑多な処理を記述するだけです．コードは少し長くなります．
 \inputminted[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}{\takuzooasset/step1_4.c}
-どんな処理を追加したかというと，Ctrl-C，Ctrl-Z，Ctrl-S，Ctrl-Q，Ctrl-Vを無効化し，Ctrl-Mを\mintinline{bash}{carriage return}へ修正．
-さらに\mintinline{c}{termios.h}に記載されているいくつかのフラグを無効化しています．あとはエラー処理と\mintinline{c}{read()}のタイムアウトなんかも設定しています．
-なんか説明が雑だなと思ったあなたごめんなさい\footnote{実装内容やプログラムの詳細については次の執筆機会か，あるいは自分のブログに書きます． http://takuzoo3868.hatenablog.com/}．ページの都合です\verb#(´；ω；｀)#
+Ctrl-C，Ctrl-Z，Ctrl-S，Ctrl-Q，Ctrl-Vを無効化し，Ctrl-Mを\mintinline{bash}{carriage return}へ修正しました．
+さらに\mintinline{c}{termios.h}に記載されているいくつかのフラグを無効化しています．
+
+自分が調べた範囲の知識ですが，
+\mintinline{c}{BRKINT}はonの状態だとCtrl-Cと同様にSIGINT信号による割り込みを行ってしまいます．
+\mintinline{c}{INPCK}は端末におけるデータ整合性確認のためにパリティチェックを可能にします．しかし，現在の端末ではあまり有効な手法ではないため元々offになっている事が多いです．
+\mintinline{c}{ISTRIP}は入力されたbyteの第8bitを0へ設定するフラグです．これも大概すでにoffとなっていると思います．
+これらのフラグは今現在あるほとんどの端末では既にoffになっている事が多いです．
+そんなに気にしなくても良いかなと思いますが，色んな端末に対応したいので設定しておきます．
+
+前段階のソースコードの状態だと\mintinline{c}{read()}はキーボードからの入力を無制限に待ってから復帰するので，タイムアウトを設定しました．
+一定時間キーボードから入力がない場合，\mintinline{c}{read()}が返ってきます．設定のために\mintinline{c}{termios.h}から\mintinline{c}{VMIN}と\mintinline{c}{VTIME}を利用しました．
+\mintinline{c}{VMIN}は\mintinline{c}{read()}が復帰するまでに必要な最小の入力バイト数を設定します．
+ここでは，読み取るべき入力があった場合，すぐに\mintinline{c}{read()}に処理してもらうべく0を設定しています．
+\mintinline{c}{VTIME}は\mintinline{c}{read()}へ復帰するまでに待機する最大の時間を設定します．$100 \si{\milli \second}$単位なので注意しましょう．
+しかし，WSLの場合\mintinline{c}{VTIME}を無視する事があるようです．今の所，動作に大した影響はないのですが，詳しく調べる必要があるかもしれないです．
+
+続いて，エラー処理についてです．ソースコードにある通り，
+\begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}
+    void die(const char *s) {
+        perror(s);
+        exit(1);
+    }
+\end{minted}
+にてエラーメッセージを表示してプログラムを終了する関数を設定します．\mintinline{c}{peeor()}は\mintinline{c}{errono}に
+設定されているエラーナンバーからエラーメッセージを表示してくれる関数です．よって，この\mintinline{c}{die()}を処理の中に組み込みます．
+\mintinline{c}{tcsetattr() tcgetattr() read()}は失敗すると-1を返すようエラーの状態を設定します．
+
+\newpage
+
+エラーを表示できるかの確認として
+\mintinline{c}{tcgetattr()}を利用する場合，今の段階ではテキストファイルやパイプを標準入力として与えてみるとよいかもしれないです．
+\mintinline{bash}{$ ./hoge <hoge.c}や，\mintinline{bash}{$ echo test | ./hoge}と打ち込むとおそらく次のようなエラーメッセージが返ってくるかなと思います．
+\mintinline{bash}{Inappropriate ioctl for device}．現段階ではこれでよしとします．
+ちなみにどんなエラーコードがあるのか気になる方は，次のソースコードを実行してみましょう．\mintinline{c}{errono}で定義されているメッセージが表示されるはずです．
+
+\begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{c}
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+int main(void) {
+    int i;
+    for (i = 0; i < 132; i++) {
+        errno = i;
+        printf("%03d : %s\n", errno, strerror(errno));
+    }
+    return 0;
+}
+\end{minted}
+
+実行してみると以下のような出力があります．便宜上\mintinline{bash}{error.c}とします．
+
+\begin{minted}[frame=lines,framesep=2mm,baselinestretch=1.2,fontsize=\footnotesize,linenos,breaklines]{bash}
+$ gcc -o error error.c
+$ ./error
+000 : Success
+001 : Operation not permitted
+002 : No such file or directory
+003 : No such process
+：
+以下略
+\end{minted}
+
+\newpage
 
 \section{おわりに}
 今回は入門編という事で\mintinline{bash}{raw mode}の実装のみに絞りました．
-今後プログラムとして実装するステップを述べておくと，
+今後の実装ステップを述べておくと，
 \begin{enumerate}
 \item Raw modeにおける入出力処理
 \item テキストビューワーの作成
@@ -126,6 +187,12 @@ offにすることで行単位ではなくバイト単位で入力を読み取�
 \item 文字列検索機能
 \item シンタックスハイライト
 \end{enumerate}
-となります．自分のリポジトリではこれらステップを全て実装済みなのでコードを確認していただけると良いかなと思います．
-勿論GUIアプリケーションとして開発したい方もいるでしょう．自分も今実践中なのでもし興味ある方は連絡\footnote{https://takuzoo3868.github.io/}ください！
-それでは，よい自作ライフを！！！
+となります．これらの実装手順の解説だけで，一冊の本になりそうな気がします．
+自分は現在UTF-8対応や色の設定で悩んでいるので，既存のOSSを読んで勉強している最中です．
+今現在対応しているシンタックスハイライトは，C/C++，Python，Brainfuckです．BrainfuckはLOCALの執筆合宿の時にネタで実装してみましたが，見にくい事この上ないです．
+何か見やすくなるアイディアをお持ちの方いましたら連絡ください\footnote{https://takuzoo3868.github.io}．
+
+今実装中のものはCUIベースですが，当然中にはVScodeやAtomのようにGUIアプリケーションとして開発したい方もいるでしょう．
+その方が需要あるかなと思いましたが，CUIベースは端末の勉強にもなりますし，内部動作を注意深く知っておく必要があるのでかなりオススメです．
+最終的には左側でプロジェクトディレクトリなんかも表示させたいな，とかpowerlineに対応したいなとか色々考えています．
+やってみると楽しいはずです，ネタ的にも！それでは，よい自作ライフを！！！
