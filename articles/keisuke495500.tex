@@ -164,10 +164,10 @@ FPrandomは$M=2147483647$なので周期は$2147483646$となります．
 \LaTeX で検証したいところですが，FPrandomコマンドはとても遅く，
 また，\TeX のメモリ制限によって，最後まで出力できないので．
 Pythonで検証をしてみます．
-\captionof{listing}{Pythonで実装したFPrandomのアルゴリズム}
-\inputpython{\keisukeasset/latex_lcg.py}
-\captionof{listing}{周期性の検証プログラム}
-\inputpython{\keisukeasset/periodicity.py}
+{\captionof{listing}{Pythonで実装したFPrandomのアルゴリズム}
+\inputpython{\keisukeasset/latex_lcg.py}}
+{\captionof{listing}{周期性の検証プログラム}
+\inputpython{\keisukeasset/periodicity.py}}
 時間がかかりますが，$M$回乱数を生成しても，
 最初の乱数と一致しないので，周期も通常の線形合同法に
 比べて長くなっているようです．
@@ -181,9 +181,9 @@ Pythonで検証をしてみます．
 ような模様が浮かび上がり，点が一様にプロットされません．
 FPrandomではこのような問題点がないかを検証します．
 周期性と同じくPythonで検証していきます．
-\captionof{listing}{偏りの検証プログラム}
+{\captionof{listing}{偏りの検証プログラム}
 \label{lst:bias}
-\inputpython{\keisukeasset/bias.py}
+\inputpython{\keisukeasset/bias.py}}
 Listing \ref{lst:bias}で書き込まれたcoodinates.datを
 gnuplotでプロットしてみると，
 図\ref{fig:bias}のようになります．
@@ -199,5 +199,6 @@ gnuplotでプロットしてみると，
 \section{おわりに}
 今回，FPrandomの疑似乱数生成アルゴリズムについての検証を行いました．
 しかし，今回の検証では特に問題がありませんでした．
+
 次回は，具体的な周期の長さや\LaTeX の他の乱数を生成する
 パッケージ(lcgパッケージ)などについての検証も行っていきたいと思います．
