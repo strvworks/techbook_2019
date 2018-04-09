@@ -7,24 +7,14 @@
   * lrf141.tex
   * takuzoo3868.tex
   * Jumpaku.tex
+  * aruneko99.tex
 ## コンパイル
 texlive2017をインストールしてる人は
 ``` bash
-$ uplatex -shell-escape main.tex
-$ uplatex -shell-escape main.tex
-$ dvipdfmx main
+$ latexmk -pvc main.tex
 ```
 それ以外の人は
 ``` bash
 $ docker-compose up
 ```
 3GBくらいのdocker imageをダウンロードするので注意
-
-
-##### FujiwaLaTeXさんのfork元のmasterと同期
-```bash
-git remote add upstream https://github.com/username/hogehoge.git
-git fetch upstream
-git checkout
-git merge upstream/master
-```
