@@ -14,6 +14,7 @@
 % ヘッダ・フッタの設定
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % plainスタイルのヘッダ・フッタを定義
+
 \fancypagestyle{plain}{%
   % 左ヘッダにはページ番号
   %\fancyhead[LH]{}
@@ -27,6 +28,13 @@
 }
 \pagestyle{plain}
 \renewcommand{\chaptermark}[1]{\markboth{第\thechapter 章\ #1}{}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 奇数ページ，偶数ページの余白交換
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newlength{\tmp@LOCAL}
+\setlength{\tmp@LOCAL}{\oddsidemargin}
+\setlength{\oddsidemargin}{\evensidemargin}
+\setlength{\evensidemargin}{\tmp@LOCAL}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 奥付の設定
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
