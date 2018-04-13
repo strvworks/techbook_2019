@@ -41,7 +41,6 @@
 \author{うっひょい \and ちくうぇいと \and あわあわ \and けんつ \and さわだ \and Jumpaku \and あるねこ}
 
 \date{}
-\addtolength{\headwidth}{-10mm}
 
 \begin{document}
 \frontmatter
@@ -77,11 +76,17 @@
   もし第2弾があればまた手に取ってくれるとありがたいです！
 \end{myintroduce}
 
+
 \chapter{はじめに}
+\addtolength{\oddsidemargin}{10pt}
+\addtolength{\evensidemargin}{-10pt}
+%\addtolength{\textwidth}{-14pt}
 \input{\articlepath/first}
 
 \tableofcontents
 \mainmatter
+%\addtolength{\oddsidemargin}{-20pt}
+%\addtolength{\evensidemargin}{18pt}
 
 \chapterauthor{うっひょい}
 \chapter{\LaTeX の乱数生成アルゴリズムを調べる}
